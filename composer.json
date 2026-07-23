@@ -1,0 +1,42 @@
+{
+    "name": "codezone/jif",
+    "description": "The Jif WordPress theme.",
+    "license": "proprietary",
+    "require": {
+        "php": "^7.4|^8.0",
+        "codezone/wp-support": "^1.1"
+    },
+    "require-dev": {
+        "brain/monkey": "^2.6",
+        "phpunit/phpunit": "^9.5",
+        "mockery/mockery": "^1.4",
+        "squizlabs/php_codesniffer": "^3.7",
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "JifTheme\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JifTheme\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "phpcs",
+        "lint:fix": "phpcbf",
+        "version": "./version.sh"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.27"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "platform-check": false
+    }
+}

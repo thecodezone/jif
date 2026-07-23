@@ -1,0 +1,88 @@
+name: Deploy
+
+on:
+  release:
+    types: [published]
+  push:
+    branches:
+      - main
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    environment: Production
+    steps:
+      - name: Download release asset
+        run: |
+          curl -L -H "Authorization: token ${{ secrets.GH_PAT }}" \
+            -H "Accept: application/octet-stream" \
+            $(curl -s -H "Authorization: token ${{ secrets.GH_PAT }}" \
+              https://api.github.com/repos/${{ github.repository }}/releases/latest | \
+              jq -r '.assets[] | select(.name=="jif.zip") | .url') \
+            -o jif.zip
+
+      - name: Upload theme to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ vars.SSH_PORT }}
+          source: "jif.zip"
+          target: "/tmp/"
+
+      - name: Install theme via WP-CLI
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ vars.SSH_PORT }}
+          script: |
+            cd ${{ vars.SSH_PATH }}
+            wp theme install /tmp/jif.zip --force --activate
+            rm /tmp/jif.zip
+
+#  staging:
+#    runs-on: ubuntu-latest
+#    if: github.ref == 'refs/heads/main'
+#    environment: Staging
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Install PHP
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: "8.1"
+#
+#      - name: Install dependencies
+#        run: composer install --no-dev --no-interaction --optimize-autoloader
+#
+#      - name: Package release
+#        run: |
+#          mkdir jif
+#          cp -r config functions.php src style.css vendor composer.json composer.lock jif/
+#          zip -r jif.zip jif
+#
+#      - name: Upload theme to server
+#        uses: appleboy/scp-action@master
+#        with:
+#          host: ${{ vars.SSH_HOST }}
+#          username: ${{ vars.SSH_USER }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          port: ${{ vars.SSH_PORT }}
+#          source: "jif.zip"
+#          target: "/tmp/"
+#
+#      - name: Install theme via WP-CLI
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ vars.SSH_HOST }}
+#          username: ${{ vars.SSH_USER }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          port: ${{ vars.SSH_PORT }}
+#          script: |
+#            cd ${{ vars.SSH_PATH }}
+#            wp theme install /tmp/jif.zip --force --activate
+#            rm /tmp/jif.zip

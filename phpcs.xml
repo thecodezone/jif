@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<ruleset name="Jif Theme">
+    <description>WordPress Coding Standards for Jif Child Theme</description>
+
+    <!-- What to scan -->
+    <file>.</file>
+
+    <!-- Exclude patterns -->
+    <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/node_modules/*</exclude-pattern>
+    <exclude-pattern>*.min.js</exclude-pattern>
+    <exclude-pattern>*.min.css</exclude-pattern>
+
+    <!-- Show progress and sniff codes -->
+    <arg value="ps"/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+
+    <!-- Rules: WordPress Coding Standards -->
+    <rule ref="WordPress-Core">
+        <!-- Relax filename rules for child themes -->
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+    </rule>
+
+    <!-- WordPress-Docs -->
+    <rule ref="WordPress-Docs">
+        <!-- Allow missing @package tags -->
+        <exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
+    </rule>
+
+    <!-- Exclude specific files from file comment check (false positive) -->
+    <rule ref="Squiz.Commenting.FileComment.Missing">
+        <exclude-pattern>src/bootstrap\.php</exclude-pattern>
+        <exclude-pattern>functions\.php</exclude-pattern>
+    </rule>
+
+    <!-- Check for PHP cross-version compatibility -->
+    <config name="testVersion" value="8.1-"/>
+    <rule ref="PHPCompatibilityWP"/>
+
+    <!-- Minimum supported WordPress version -->
+    <config name="minimum_supported_wp_version" value="6.0"/>
+
+    <!-- Prefix for hook names -->
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="jif_theme"/>
+                <element value="JifTheme"/>
+            </property>
+        </properties>
+        <!-- Exclude CLI scripts from global naming requirements -->
+        <exclude-pattern>scripts/*</exclude-pattern>
+    </rule>
+
+    <!-- Text domain check -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="jif"/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

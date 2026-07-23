@@ -1,0 +1,11 @@
+vendor
+.idea
+/.phpunit.result.cache
+.junie
+
+# HTTP Client secrets
+http-client.env.json
+http-client.private.env.json
+http/responses/
+
+.env

@@ -11,3 +11,4 @@ http/responses/
 .env
 vendor/
 node_modules/
+assets/build/

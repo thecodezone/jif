@@ -35,3 +35,23 @@ jobs:
 
     - name: Run PHPCS
       run: composer lint
+
+  assets:
+    runs-on: ubuntu-latest
+    name: Build Frontend Assets
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: "24"
+        cache: "npm"
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build frontend assets
+      run: npm run build

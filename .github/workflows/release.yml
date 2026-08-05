@@ -17,13 +17,25 @@ jobs:
         with:
           php-version: "8.1"
 
-      - name: Install dependencies
+      - name: Install PHP dependencies
         run: composer install --no-dev --no-interaction --optimize-autoloader
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build frontend assets
+        run: npm run build
 
       - name: Package release
         run: |
           mkdir jif
-          cp -r config functions.php src style.css vendor composer.json composer.lock jif/
+          cp -r config functions.php src style.css vendor assets composer.json composer.lock jif/
           zip -r jif.zip jif
 
       - name: Create Release

@@ -64,8 +64,8 @@ class Theme {
 			'jif-theme',
 			'jifBrandFrame',
 			array(
-				'left'  => get_stylesheet_directory_uri() . '/assets/left-white.svg',
-				'right' => get_stylesheet_directory_uri() . '/assets/right-white.svg',
+				'left'  => get_stylesheet_directory_uri() . '/assets/left-color.svg',
+				'right' => get_stylesheet_directory_uri() . '/assets/right-color.svg',
 			)
 		);
 	}

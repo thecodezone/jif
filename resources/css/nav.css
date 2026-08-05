@@ -1,0 +1,77 @@
+/*
+ * Header / nav styling for Blocksy's header builder output, matching the
+ * JIF Design System Navbar/Button components. Uses Blocksy's own
+ * --theme-palette-color-* variables for all colors (so this stays in sync
+ * with the Customizer) — palette-color-9 and -10 were added to the
+ * Customizer specifically to match the design's muted nav-link gray and
+ * gold accent, since none of the original 8 slots matched those exactly.
+ * Font-weight/size/shadow values are hardcoded since the Customizer has
+ * no token for those.
+ */
+
+[data-header*="type-1"] .ct-header [data-id="menu"] {
+	--menu-item-spacing: 0;
+}
+
+.site-header .site-branding .site-logo-container img {
+	height: 40px;
+	width: auto;
+}
+
+#header-menu-1 {
+	justify-self: center;
+}
+
+@media (min-width: 1000px) {
+	#header [data-column=end]>[data-items=primary] {
+		justify-content: space-between;
+	}
+}
+
+
+.header-menu-1.menu-container > ul.menu {
+	display: flex;
+	align-items: center;
+	gap: 35px;
+}
+
+.header-menu-1.menu-container .menu-item > .ct-menu-link {
+	font-family: var(--theme-font-family);
+	font-weight: 700;
+	color: var(--theme-palette-color-9);
+	text-decoration: none;
+	padding-bottom: 3px;
+	border-bottom: 2px solid transparent;
+	transition: color 140ms cubic-bezier(0.4, 0, 0.2, 1), border-color 140ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 1000px) {
+	.header-menu-1.menu-container .menu-item > .ct-menu-link {
+		font-size: 13px;
+	}
+}
+
+@media (min-width: 1200px) {
+	.header-menu-1.menu-container .menu-item > .ct-menu-link {
+		font-size: 15px;
+	}
+}
+
+
+.header-menu-1.menu-container .menu-item>.ct-menu-link:not(:empty) {
+	padding: 0;
+}
+
+
+
+.header-menu-1.menu-container .menu-item > .ct-menu-link:hover,
+.header-menu-1.menu-container .menu-item > .ct-menu-link:focus-visible {
+	color: var(--theme-palette-color-1);
+	border-bottom-color: var(--theme-palette-color-10);
+}
+
+.header-menu-1.menu-container .menu-item.current-menu-item > .ct-menu-link,
+.header-menu-1.menu-container .menu-item.current_page_item > .ct-menu-link {
+	color: var(--theme-palette-color-1);
+	border-bottom-color: var(--theme-palette-color-10);
+}

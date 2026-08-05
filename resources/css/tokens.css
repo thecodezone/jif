@@ -1,0 +1,8 @@
+/*
+ * Theme-level design tokens that aren't already exposed by Blocksy's
+ * customizer (--theme-*) variables.
+ */
+
+:root {
+	--font-serif: "Roboto Serif", Georgia, serif;
+}

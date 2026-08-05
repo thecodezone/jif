@@ -1,6 +1,6 @@
 <?php
 /**
- * Theme Service Provider
+ * Vite Service Provider
  *
  * @package JifTheme
  */
@@ -8,14 +8,13 @@
 namespace JifTheme\ServiceProviders;
 
 use JifTheme\Helpers\Vite;
-use JifTheme\Theme;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use League\Container\ServiceProvider\BootableServiceProviderInterface;
 
 /**
- * Service provider for Theme configuration and hooks.
+ * Service provider for Vite asset loading.
  */
-class ThemeServiceProvider extends AbstractServiceProvider implements BootableServiceProviderInterface {
+class ViteServiceProvider extends AbstractServiceProvider implements BootableServiceProviderInterface {
 	/**
 	 * Determines whether the given identifier is provided by this service.
 	 *
@@ -23,22 +22,24 @@ class ThemeServiceProvider extends AbstractServiceProvider implements BootableSe
 	 * @return bool Returns true if the identifier is provided, otherwise false.
 	 */
 	public function provides( string $id ): bool {
-		return in_array( $id, array( Theme::class ), true );
+		return in_array( $id, array( Vite::class ), true );
 	}
 
 	/**
 	 * Register services with the container.
 	 */
 	public function register(): void {
-		$this->getContainer()->add( Theme::class )
-			->addArgument( Vite::class )
-			->setShared( true );
+		$this->getContainer()->addShared(
+			Vite::class,
+			function () {
+				return new Vite( get_stylesheet_directory() . '/assets/build' );
+			}
+		);
 	}
 
 	/**
 	 * Boot the service provider.
 	 */
 	public function boot(): void {
-		$this->getContainer()->get( Theme::class );
 	}
 }

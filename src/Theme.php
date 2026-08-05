@@ -7,16 +7,29 @@
 
 namespace JifTheme;
 
+use JifTheme\Helpers\Vite;
+
 /**
  * Service class for Theme logic.
  */
 class Theme {
 	/**
+	 * Vite asset loader.
+	 *
+	 * @var Vite
+	 */
+	private Vite $vite;
+
+	/**
 	 * Constructor.
 	 *
 	 * Registers WordPress hooks.
+	 *
+	 * @param Vite $vite Vite asset loader.
 	 */
-	public function __construct() {
+	public function __construct( Vite $vite ) {
+		$this->vite = $vite;
+
 		add_action( 'after_switch_theme', array( $this, 'maybe_migrate_mods' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 
@@ -25,7 +38,7 @@ class Theme {
 	}
 
 	/**
-	 * Enqueue theme styles.
+	 * Enqueue theme styles and scripts.
 	 */
 	public function enqueue_styles(): void {
 		$theme   = wp_get_theme();
@@ -37,6 +50,23 @@ class Theme {
 			get_stylesheet_directory_uri() . '/style.css',
 			array( 'blocksy-style' ),
 			$version
+		);
+
+		$this->vite->enqueue(
+			'resources/js/app.js',
+			array(
+				'handle'    => 'jif-theme',
+				'in-footer' => true,
+			)
+		);
+
+		wp_localize_script(
+			'jif-theme',
+			'jifBrandFrame',
+			array(
+				'left'  => get_stylesheet_directory_uri() . '/assets/left-white.svg',
+				'right' => get_stylesheet_directory_uri() . '/assets/right-white.svg',
+			)
 		);
 	}
 

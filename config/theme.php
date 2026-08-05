@@ -8,6 +8,7 @@
 return array(
 	'providers' => array(
 		JifTheme\ServiceProviders\ACFServiceProvider::class,
+		JifTheme\ServiceProviders\ViteServiceProvider::class,
 		JifTheme\ServiceProviders\ThemeServiceProvider::class,
 	),
 );

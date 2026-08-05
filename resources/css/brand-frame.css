@@ -1,0 +1,112 @@
+/*
+ * Brand frame: left.svg + right.svg flanking a circular stackable image,
+ * with staggered entrance animation and a slow pan on the center image.
+ */
+
+.brand-frame-wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.brand-frame-wrap .stk-img-wrapper img {
+	max-width: 89.5%;
+}
+
+.brand-frame-wrap__side {
+	position: absolute;
+	top: 50%;
+	display: block;
+	width: 100%;
+	height: 100%;
+	transform: translateY(-50%);
+	opacity: 0;
+	z-index: 2;
+	pointer-events: none;
+}
+
+.brand-frame-wrap__side img {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.brand-frame-wrap__side--left {
+	left: 0;
+	transform: translate(-40px, -50%);
+}
+
+.brand-frame-wrap__side--right {
+	right: 0;
+	height: 88%;
+	width: 88%;
+	transform: translate(40px, -50%);
+}
+
+.brand-frame-wrap .brand-frame {
+	position: relative;
+	z-index: 1;
+	opacity: 0;
+	transform: translateY(24px);
+}
+
+/* Entrance animation, staggered: left, then right, then center. */
+
+.brand-frame-wrap.is-visible .brand-frame-wrap__side--left {
+	animation: brand-frame-in-left 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0s forwards;
+}
+
+.brand-frame-wrap.is-visible .brand-frame-wrap__side--right {
+	animation: brand-frame-in-right 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+}
+
+.brand-frame-wrap.is-visible .brand-frame {
+	animation: brand-frame-in-center 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+}
+
+@keyframes brand-frame-in-left {
+	from {
+		opacity: 0;
+		transform: translate(-40px, -50%);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-15%, -50%);
+	}
+}
+
+@keyframes brand-frame-in-right {
+	from {
+		opacity: 0;
+		transform: translate(40px, -50%);
+	}
+	to {
+		opacity: 1;
+		transform: translate(9%, -50%);
+	}
+}
+
+@keyframes brand-frame-in-center {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.brand-frame-wrap__side,
+	.brand-frame-wrap .brand-frame {
+		opacity: 1;
+		transform: none;
+		animation: none !important;
+	}
+
+	.brand-frame-wrap.is-visible .brand-frame .stk-img-wrapper img {
+		animation: none !important;
+	}
+}

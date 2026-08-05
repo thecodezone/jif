@@ -20,20 +20,28 @@ function initBrandFrames() {
 		target.parentNode.insertBefore( wrap, target );
 
 		var left = document.createElement( 'img' );
-		left.className = 'brand-frame-wrap__side brand-frame-wrap__side--left';
+		left.className = 'brand-frame-wrap__side-spin';
 		left.src = settings.left || '';
 		left.alt = '';
 		left.setAttribute( 'aria-hidden', 'true' );
 
+		var leftSide = document.createElement( 'span' );
+		leftSide.className = 'brand-frame-wrap__side brand-frame-wrap__side--left';
+		leftSide.appendChild( left );
+
 		var right = document.createElement( 'img' );
-		right.className = 'brand-frame-wrap__side brand-frame-wrap__side--right';
+		right.className = 'brand-frame-wrap__side-spin';
 		right.src = settings.right || '';
 		right.alt = '';
 		right.setAttribute( 'aria-hidden', 'true' );
 
+		var rightSide = document.createElement( 'span' );
+		rightSide.className = 'brand-frame-wrap__side brand-frame-wrap__side--right';
+		rightSide.appendChild( right );
+
 		wrap.appendChild( target );
-		wrap.appendChild( left );
-		wrap.appendChild( right );
+		wrap.appendChild( leftSide );
+		wrap.appendChild( rightSide );
 
 		wraps.push( wrap );
 	} );

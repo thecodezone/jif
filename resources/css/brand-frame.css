@@ -10,10 +10,6 @@
 	justify-content: center;
 }
 
-.brand-frame-wrap .stk-img-wrapper img {
-	max-width: 89.5%;
-}
-
 .brand-frame-wrap__side {
 	position: absolute;
 	top: 50%;
@@ -26,11 +22,26 @@
 	pointer-events: none;
 }
 
-.brand-frame-wrap__side img {
+.brand-frame-wrap .stk-img {
+	transform: translateY(3%);
+}
+
+.brand-frame-wrap .stk-img-wrapper {
+	overflow: visible;
+}
+
+.brand-frame-wrap__side-spin {
 	display: block;
 	width: 100%;
 	height: 100%;
 }
+
+.brand-frame-wrap__side-spin img {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
 
 .brand-frame-wrap__side--left {
 	left: 0;
@@ -39,8 +50,8 @@
 
 .brand-frame-wrap__side--right {
 	right: 0;
-	height: 88%;
-	width: 88%;
+	height: 87%;
+	width: 87%;
 	transform: translate(40px, -50%);
 }
 
@@ -65,6 +76,29 @@
 	animation: brand-frame-in-center 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
 }
 
+/*
+ * Continuous rotation, once the frame has entered: each side spins the opposite direction,
+ * pivoting around the wrap's center rather than each crescent's own center. The origin
+ * offsets below correct for the --left/--right sides' own size and translate() offset,
+ * so both crescents rotate around the same shared point (the circular image's center).
+ */
+
+.brand-frame-wrap__side--left .brand-frame-wrap__side-spin {
+	transform-origin: 65% 50%;
+}
+
+.brand-frame-wrap__side--right .brand-frame-wrap__side-spin {
+	transform-origin: 29.53% 50%;
+}
+
+.brand-frame-wrap.is-visible .brand-frame-wrap__side--left .brand-frame-wrap__side-spin {
+	animation: brand-frame-spin-cw 120s linear 1.2s infinite;
+}
+
+.brand-frame-wrap.is-visible .brand-frame-wrap__side--right .brand-frame-wrap__side-spin {
+	animation: brand-frame-spin-cw 120s linear 1.2s infinite;
+}
+
 @keyframes brand-frame-in-left {
 	from {
 		opacity: 0;
@@ -83,7 +117,7 @@
 	}
 	to {
 		opacity: 1;
-		transform: translate(9%, -50%);
+		transform: translate(13%, -50%);
 	}
 }
 
@@ -98,11 +132,33 @@
 	}
 }
 
+@keyframes brand-frame-spin-cw {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes brand-frame-spin-ccw {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(-360deg);
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.brand-frame-wrap__side,
 	.brand-frame-wrap .brand-frame {
 		opacity: 1;
 		transform: none;
+		animation: none !important;
+	}
+
+	.brand-frame-wrap__side-spin {
 		animation: none !important;
 	}
 

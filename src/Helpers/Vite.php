@@ -144,14 +144,16 @@ class Vite {
 			return false;
 		}
 
-		if ( ! isset( $manifest->data->{$entry} ) ) {
-			return false;
+		if ( $manifest->is_dev ) {
+			// The dev-server manifest has no per-entry data (it's just
+			// {base, origin, port, plugins}) — Vite serves CSS as a JS module
+			// that injects a <style> tag when executed, so this must load as
+			// a script, not a stylesheet link.
+			return (bool) ViteForWp\enqueue_asset( $this->manifest_dir, $entry, array( 'handle' => $handle ) );
 		}
 
-		if ( $manifest->is_dev ) {
-			// In dev mode, Vite serves CSS as a JS module that injects a <style> tag
-			// when executed — so this must load as a script, not a stylesheet link.
-			return (bool) ViteForWp\enqueue_asset( $this->manifest_dir, $entry, array( 'handle' => $handle ) );
+		if ( ! isset( $manifest->data->{$entry} ) ) {
+			return false;
 		}
 
 		$url  = trailingslashit( ViteForWp\prepare_asset_url( $manifest->dir ) );

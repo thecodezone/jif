@@ -8,12 +8,22 @@
 namespace JifTheme\Tests;
 
 use JifTheme\Theme;
+use JifTheme\Helpers\Vite;
 use Brain\Monkey\Functions;
 
 /**
  * Theme test class
  */
 class ThemeTest extends TestCase {
+	/**
+	 * Create a Vite helper mock for injecting into Theme.
+	 *
+	 * @return Vite
+	 */
+	private function make_vite_mock() {
+		return \Mockery::mock( Vite::class );
+	}
+
 	/**
 	 * Test that the constructor registers hooks and attempts migration.
 	 */
@@ -34,8 +44,14 @@ class ThemeTest extends TestCase {
 		Functions\expect( 'add_action' )
 			->once()
 			->with( 'wp_enqueue_scripts', \Mockery::type( 'array' ) );
+		Functions\expect( 'add_action' )
+			->once()
+			->with( 'wp_head', \Mockery::type( 'array' ), 1 );
+		Functions\expect( 'add_action' )
+			->once()
+			->with( 'enqueue_block_assets', \Mockery::type( 'array' ) );
 
-		new Theme();
+		new Theme( $this->make_vite_mock() );
 	}
 
 	/**
@@ -54,10 +70,19 @@ class ThemeTest extends TestCase {
 			->andReturn( 1 );
 		Functions\expect( 'add_action' )->andReturnNull();
 
-		$theme = new Theme();
+		$vite = $this->make_vite_mock();
+		$vite->shouldReceive( 'enqueue' )
+			->once()
+			->with( 'resources/js/app.js', \Mockery::type( 'array' ) );
+		$vite->shouldReceive( 'inline_css' )
+			->once()
+			->with( 'resources/css/critical.css' )
+			->andReturn( 'body{color:red}' );
+
+		$theme = new Theme( $vite );
 
 		Functions\expect( 'get_template_directory_uri' )->once()->andReturn( 'https://example.com/parent' );
-		Functions\expect( 'get_stylesheet_directory_uri' )->once()->andReturn( 'https://example.com/child' );
+		Functions\expect( 'get_stylesheet_directory_uri' )->times( 3 )->andReturn( 'https://example.com/child' );
 
 		Functions\expect( 'wp_enqueue_style' )
 			->once()
@@ -71,6 +96,10 @@ class ThemeTest extends TestCase {
 				array( 'blocksy-style' ),
 				'1.0.0'
 			);
+
+		Functions\expect( 'wp_localize_script' )
+			->once()
+			->with( 'jif-theme', 'jifBrandFrame', \Mockery::type( 'array' ) );
 
 		$theme->enqueue_styles();
 	}
@@ -106,7 +135,7 @@ class ThemeTest extends TestCase {
 			->once()
 			->with( 'jif_theme_mods_migrated', 1 );
 
-		new Theme();
+		new Theme( $this->make_vite_mock() );
 	}
 
 	/**
@@ -129,7 +158,7 @@ class ThemeTest extends TestCase {
 			->never()
 			->with( 'jif_theme_mods_migrated', 1 );
 
-		new Theme();
+		new Theme( $this->make_vite_mock() );
 	}
 
 	/**
@@ -148,7 +177,7 @@ class ThemeTest extends TestCase {
 			->never()
 			->with( 'jif_theme_mods_migrated' );
 
-		new Theme();
+		new Theme( $this->make_vite_mock() );
 	}
 
 	/**
@@ -172,7 +201,7 @@ class ThemeTest extends TestCase {
 			->never()
 			->with( 'theme_mods_parent-theme' );
 
-		new Theme();
+		new Theme( $this->make_vite_mock() );
 	}
 
 	/**
@@ -206,6 +235,6 @@ class ThemeTest extends TestCase {
 			->once()
 			->with( 'jif_theme_mods_migrated', 1 );
 
-		new Theme();
+		new Theme( $this->make_vite_mock() );
 	}
 }

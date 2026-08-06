@@ -74,7 +74,7 @@
 .cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__inner {
 	flex-direction: column;
 	align-items: stretch;
-	gap: 40px;
+	gap: 10px;
 }
 
 .cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__before,

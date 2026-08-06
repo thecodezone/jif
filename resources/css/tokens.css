@@ -5,7 +5,4 @@
 
 :root {
 	--font-serif: "Roboto Serif", Georgia, serif;
-	--cz-cb-background: var(--theme-palette-color-11, #f7f8fd);
-	--cz-cb-border-color: var(--theme-palette-color-12, #e2e5f1);
-	--cz-cb-icon-color: var(--wp--preset--color--palette-color-8, #c6a532);
 }

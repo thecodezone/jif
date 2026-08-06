@@ -29,7 +29,8 @@
         "test": "phpunit",
         "lint": "phpcs",
         "lint:fix": "phpcbf",
-        "version": "./version.sh"
+        "version": "bin/version.sh",
+        "release": "bin/build-release.sh"
     },
     "config": {
         "platform": {

@@ -1,0 +1,14 @@
+.cz-cb-responsive-control {
+	margin-bottom: 16px;
+}
+
+.cz-cb-responsive-control__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 4px;
+}
+
+.cz-comparison-bar {
+	position: relative;
+}

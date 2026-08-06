@@ -32,6 +32,8 @@ class Theme {
 
 		add_action( 'after_switch_theme', array( $this, 'maybe_migrate_mods' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'wp_head', array( $this, 'inline_critical_css' ), 1 );
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_editor_styles' ) );
 
 		// Also run it on instantiation if not already done, in case the theme was already active.
 		$this->maybe_migrate_mods();
@@ -68,6 +70,49 @@ class Theme {
 				'right' => get_stylesheet_directory_uri() . '/assets/right-color.svg',
 			)
 		);
+
+		// While the Vite dev server is running there's no built file to inline, so
+		// fall back to enqueueing the critical CSS entry as a normal stylesheet.
+		if ( null === $this->vite->inline_css( 'resources/css/critical.css' ) ) {
+			$this->vite->enqueue(
+				'resources/css/critical.css',
+				array( 'handle' => 'jif-theme-critical' )
+			);
+		}
+	}
+
+	/**
+	 * Enqueue theme design tokens (CSS variables) in the block editor.
+	 *
+	 * Blocks rely on --font-serif, --cz-cb-icon-color, etc. as fallbacks, so
+	 * those need to be available while editing, not just on the frontend.
+	 * Hooked on enqueue_block_assets (not enqueue_block_editor_assets) so it
+	 * loads inside the editor's iframe canvas, where blocks actually render —
+	 * enqueue_block_editor_assets only reaches the outer admin document.
+	 * Skipped on the frontend since app.css already imports tokens.css there.
+	 */
+	public function enqueue_editor_styles(): void {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$this->vite->enqueue_css( 'resources/css/tokens.css', 'jif-theme-tokens' );
+	}
+
+	/**
+	 * Inline the built critical CSS directly in <head>.
+	 *
+	 * No-op while the Vite dev server is running, since enqueue_styles()
+	 * already falls back to a normal stylesheet enqueue in that case.
+	 */
+	public function inline_critical_css(): void {
+		$css = $this->vite->inline_css( 'resources/css/critical.css' );
+
+		if ( null === $css ) {
+			return;
+		}
+
+		echo '<style id="jif-theme-critical-css">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

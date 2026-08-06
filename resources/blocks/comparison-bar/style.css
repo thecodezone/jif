@@ -1,0 +1,148 @@
+.cz-comparison-bar {
+	background: var(--cz-cb-background);
+	border: var(--cz-cb-border-width) solid var(--cz-cb-border-color);
+	border-radius: var(--cz-cb-border-radius);
+	padding: var(--cz-cb-padding-mobile);
+}
+
+.cz-comparison-bar__inner {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.cz-comparison-bar__before,
+.cz-comparison-bar__after {
+	flex: 1 1 0;
+	min-width: 0;
+	font-family: var(--cz-cb-font-family, var(--font-serif, inherit));
+}
+
+.cz-comparison-bar__before {
+	color: var(--cz-cb-before-color);
+	font-size: var(--cz-cb-before-size-mobile);
+	font-weight: var(--cz-cb-before-weight);
+	text-align: left;
+}
+
+.cz-comparison-bar__after {
+	color: var(--cz-cb-after-color);
+	font-size: var(--cz-cb-after-size-mobile);
+	font-weight: var(--cz-cb-after-weight);
+	text-align: right;
+}
+
+.cz-comparison-bar__before p,
+.cz-comparison-bar__after p {
+	margin: 0;
+}
+
+/*
+ * The icon sits dead-center of the bar itself, positioned absolutely relative
+ * to .cz-comparison-bar__inner — not the flex midpoint between the two text
+ * columns, which drifts whenever the before/after label lengths differ.
+ */
+.cz-comparison-bar__icon {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: none;
+	color: var(--cz-cb-icon-color);
+	pointer-events: none;
+}
+
+/*
+ * Sized by height only (like a font glyph) so each icon's own aspect ratio
+ * is preserved — wide icons render wider, tall/narrow icons render narrower,
+ * with no forced square box padding the glyph with empty space. The bar's
+ * own height is driven by its padding/text, not the icon.
+ */
+.cz-comparison-bar__icon-svg {
+	height: var(--cz-cb-icon-size-mobile);
+	width: auto;
+	fill: currentColor;
+}
+
+/* Stack before/after vertically on mobile when the block opts in, since a
+   centered-icon flex row gets cramped at narrow widths with two-line labels. */
+.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__inner {
+	flex-direction: column;
+	align-items: stretch;
+	gap: 40px;
+}
+
+.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__before,
+.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__after {
+	text-align: center;
+}
+
+.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__icon {
+	position: static;
+	transform: none;
+	left: auto;
+	top: auto;
+	margin: 0 auto;
+}
+
+@media (min-width: 600px) {
+	.cz-comparison-bar {
+		padding: var(--cz-cb-padding-tablet);
+	}
+
+	.cz-comparison-bar__before {
+		font-size: var(--cz-cb-before-size-tablet);
+	}
+
+	.cz-comparison-bar__after {
+		font-size: var(--cz-cb-after-size-tablet);
+	}
+
+	.cz-comparison-bar__icon-svg {
+		height: var(--cz-cb-icon-size-tablet);
+	}
+
+	.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__inner {
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__before {
+		text-align: left;
+	}
+
+	.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__after {
+		text-align: right;
+	}
+
+	.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__icon {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		margin: 0;
+	}
+}
+
+@media (min-width: 1000px) {
+	.cz-comparison-bar {
+		padding: var(--cz-cb-padding-desktop);
+	}
+
+	.cz-comparison-bar__before {
+		font-size: var(--cz-cb-before-size-desktop);
+	}
+
+	.cz-comparison-bar__after {
+		font-size: var(--cz-cb-after-size-desktop);
+	}
+
+	.cz-comparison-bar__icon-svg {
+		height: var(--cz-cb-icon-size-desktop);
+	}
+}

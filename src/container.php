@@ -8,7 +8,6 @@
 use CodeZone\WPSupport\Config\ConfigInterface;
 use CodeZone\WPSupport\Container\ContainerFactory;
 use League\Container\Container;
-use League\Container\ServiceProvider\BootableServiceProviderInterface;
 use JifTheme\ServiceProviders\ConfigServiceProvider;
 
 /**
@@ -24,31 +23,21 @@ function jif_theme_container(): Container {
 		$container = ContainerFactory::singleton();
 
 		// Service providers to register (order matters - ConfigServiceProvider must be first).
+		// addServiceProvider() already calls boot() on bootable providers, so no need to do so explicitly.
 		$boot_providers = array(
 			ConfigServiceProvider::class,
 		);
 
-		// Register and boot service providers.
 		foreach ( $boot_providers as $provider ) {
-			$provider_instance = $container->get( $provider );
-			$container->addServiceProvider( $provider_instance );
-			// Explicitly boot the provider if it's bootable.
-			if ( $provider_instance instanceof BootableServiceProviderInterface ) {
-				$provider_instance->boot();
-			}
+			$container->addServiceProvider( $container->get( $provider ) );
 		}
 
 		$config    = $container->get( ConfigInterface::class );
 		$providers = $config->get( 'theme.providers', array() );
 		foreach ( $providers as $provider ) {
-			$provider_instance = $container->get( $provider );
-			$container->addServiceProvider( $provider_instance );
-			// Explicitly boot the provider if it's bootable.
-			if ( $provider_instance instanceof BootableServiceProviderInterface ) {
-				$provider_instance->boot();
-			}
+			$container->addServiceProvider( $container->get( $provider ) );
 		}
-	}//end if
+	}
 
 	return $container;
 }

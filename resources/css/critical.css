@@ -1,4 +1,8 @@
 /*
+ * Critical CSS: inlined directly in <head> (see Theme::inline_critical_css)
+ * rather than loaded via the external app.css bundle, so above-the-fold nav
+ * styling is available before first paint with no extra network request.
+ *
  * Header / nav styling for Blocksy's header builder output, matching the
  * JIF Design System Navbar/Button components. Uses Blocksy's own
  * --theme-palette-color-* variables for all colors (so this stays in sync
@@ -28,7 +32,6 @@
 	}
 }
 
-
 .header-menu-1.menu-container > ul.menu {
 	display: flex;
 	align-items: center;
@@ -57,12 +60,9 @@
 	}
 }
 
-
 .header-menu-1.menu-container .menu-item>.ct-menu-link:not(:empty) {
 	padding: 0;
 }
-
-
 
 .header-menu-1.menu-container .menu-item > .ct-menu-link:hover,
 .header-menu-1.menu-container .menu-item > .ct-menu-link:focus-visible {

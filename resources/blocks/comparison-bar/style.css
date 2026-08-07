@@ -15,7 +15,6 @@
 
 .cz-comparison-bar__before,
 .cz-comparison-bar__after {
-	flex: 1 1 0;
 	min-width: 0;
 	font-family: var(--cz-cb-font-family, var(--font-serif, inherit));
 }

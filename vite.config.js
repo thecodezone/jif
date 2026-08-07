@@ -12,6 +12,8 @@ export default defineConfig( async () => ( {
 				tokens: 'resources/css/tokens.css',
 				'comparison-bar': 'resources/blocks/comparison-bar/index.jsx',
 				'comparison-bar-frontend': 'resources/blocks/comparison-bar/frontend.css',
+				'featured-stories': 'resources/blocks/featured-stories/index.jsx',
+				'featured-stories-frontend': 'resources/blocks/featured-stories/frontend.css',
 			},
 			outDir: 'assets/build',
 		} ),

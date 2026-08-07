@@ -1,0 +1,165 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cz/featured-stories",
+	"title": "Featured Stories (Post Cards)",
+	"category": "text",
+	"description": "A grid of post cards (image, category, date, title, excerpt) pulled from a live query. Pair with heading/button blocks to build a full \"Featured Stories\" section.",
+	"keywords": [ "posts", "stories", "cards", "query", "blog" ],
+	"textdomain": "jif",
+	"attributes": {
+		"postsToShow": {
+			"type": "number",
+			"default": 3
+		},
+		"categoryId": {
+			"type": "number",
+			"default": 0
+		},
+		"order": {
+			"type": "string",
+			"default": "desc"
+		},
+		"orderBy": {
+			"type": "string",
+			"default": "date"
+		},
+		"excerptLength": {
+			"type": "number",
+			"default": 20
+		},
+		"minCardWidth": {
+			"type": "object",
+			"default": {
+				"desktop": 300,
+				"tablet": 260,
+				"mobile": 240
+			}
+		},
+		"gridGap": {
+			"type": "object",
+			"default": {
+				"desktop": 32,
+				"tablet": 24,
+				"mobile": 20
+			}
+		},
+		"cardPadding": {
+			"type": "number",
+			"default": 24
+		},
+		"imageAspectRatio": {
+			"type": "string",
+			"default": "16 / 10"
+		},
+		"borderWidth": {
+			"type": "number",
+			"default": 1
+		},
+		"borderRadius": {
+			"type": "number",
+			"default": 12
+		},
+		"titleFontFamily": {
+			"type": "string",
+			"default": "var(--font-serif)"
+		},
+		"bodyFontFamily": {
+			"type": "string",
+			"default": "var(--font-serif)"
+		},
+		"uiFontFamily": {
+			"type": "string",
+			"default": "var(--theme-font-family)"
+		},
+		"titleFontSize": {
+			"type": "object",
+			"default": {
+				"desktop": 20,
+				"tablet": 19,
+				"mobile": 18
+			}
+		},
+		"titleFontWeight": {
+			"type": "string",
+			"default": "700"
+		},
+		"excerptFontSize": {
+			"type": "object",
+			"default": {
+				"desktop": 15,
+				"tablet": 15,
+				"mobile": 14
+			}
+		},
+		"metaFontSize": {
+			"type": "object",
+			"default": {
+				"desktop": 13,
+				"tablet": 13,
+				"mobile": 12
+			}
+		},
+		"badgeFontSize": {
+			"type": "number",
+			"default": 13
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"borderColor": {
+			"type": "string",
+			"default": "#e2e5f1"
+		},
+		"mediaBackgroundColor": {
+			"type": "string",
+			"default": "#dde5ff"
+		},
+		"mediaIconColor": {
+			"type": "string",
+			"default": "#9db4f0"
+		},
+		"badgeBackgroundColor": {
+			"type": "string",
+			"default": "var(--theme-palette-color-1, #0c1488)"
+		},
+		"badgeTextColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"titleColor": {
+			"type": "string",
+			"default": "var(----theme-palette-color-15, #0e1226)"
+		},
+		"excerptColor": {
+			"type": "string",
+			"default": "#282f4c"
+		},
+		"metaColor": {
+			"type": "string",
+			"default": "#6d7497"
+		},
+		"linkColor": {
+			"type": "string",
+			"default": "var(--theme-palette-color-1, #0c1488)"
+		},
+		"linkHoverColor": {
+			"type": "string",
+			"default": "var(--theme-palette-color-2, #c6a532)"
+		},
+		"shadow": {
+			"type": "string",
+			"default": "0 2px 6px rgba(12, 20, 136, 0.07)"
+		},
+		"shadowHover": {
+			"type": "string",
+			"default": "0 8px 20px rgba(12, 20, 136, 0.09)"
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"render": "file:./render.php"
+}

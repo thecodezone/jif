@@ -1,0 +1,175 @@
+/*
+ * All values below are driven by --cz-fs-* custom properties set inline by
+ * FeaturedStories::build_style_vars() from block attributes — same
+ * responsive-attribute pattern as cz-comparison-bar's style-vars.js
+ * (desktop/tablet/mobile → 3 vars). Fallback literals here only cover the
+ * (unlikely) case of the inline style failing to apply; block.json
+ * attribute defaults are the real source of truth for every value.
+ *
+ * Everything is nested under .cz-featured-stories (via postcss-nesting) so
+ * every compiled selector carries that class — raises specificity above
+ * Blocksy's bare element selectors (e.g. its global `h3 { color: ... }`),
+ * which otherwise won it against a same-or-lower-specificity block rule.
+ */
+.cz-featured-stories {
+	--cz-fs-min-card-width-mobile: 240px;
+	--cz-fs-grid-gap-mobile: 20px;
+
+	& .cz-featured-stories__grid {
+		display: grid;
+		grid-template-columns: repeat( auto-fit, minmax( min( var( --cz-fs-min-card-width-mobile ), 100% ), 1fr ) );
+		gap: var( --cz-fs-grid-gap-mobile );
+	}
+
+	& .cz-featured-stories__card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		background: var( --cz-fs-background, #fff );
+		border: var( --cz-fs-border-width, 1px ) solid var( --cz-fs-border-color, #e2e5f1 );
+		border-radius: var( --cz-fs-border-radius, 12px );
+		box-shadow: var( --cz-fs-shadow, 0 2px 6px rgba(12, 20, 136, 0.07) );
+		transition: box-shadow 220ms cubic-bezier(0.4, 0, 0.2, 1), transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+
+		/* Lift the whole card when either of its two real links (image, "Read
+		   more") has hover/focus — not when hovering the plain text areas,
+		   since those aren't clickable. */
+		&:has( .cz-featured-stories__media:hover, .cz-featured-stories__media:focus-visible, .cz-featured-stories__link:hover, .cz-featured-stories__link:focus-visible ) {
+			box-shadow: var( --cz-fs-shadow-hover, 0 8px 20px rgba(12, 20, 136, 0.09) );
+			transform: translateY(-3px);
+		}
+	}
+
+	& .cz-featured-stories__media {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: var( --cz-fs-image-aspect-ratio, 16 / 10 );
+		overflow: hidden;
+		background: var( --cz-fs-media-bg, #dde5ff );
+		color: var( --cz-fs-media-icon, #9db4f0 );
+		text-decoration: none;
+	}
+
+	& .cz-featured-stories__image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		margin: 0;
+	}
+
+	& .cz-featured-stories__badge {
+		position: absolute;
+		top: 12px;
+		left: 12px;
+		padding: 5px 10px;
+		border-radius: 5px;
+		background: var( --cz-fs-badge-bg, var(--theme-palette-color-1, #0c1488) );
+		color: var( --cz-fs-badge-text, #fff );
+		font-family: var( --cz-fs-ui-font-family, var(--theme-font-family) );
+		font-size: var( --cz-fs-badge-size, 13px );
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+
+	& .cz-featured-stories__body {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: var( --cz-fs-card-padding, 24px );
+	}
+
+	& .cz-featured-stories__meta {
+		display: flex;
+		gap: 10px;
+		font-family: var( --cz-fs-ui-font-family, var(--theme-font-family) );
+		font-size: var( --cz-fs-meta-size-mobile, 12px );
+		font-weight: 400;
+		color: var( --cz-fs-meta-color, #6d7497 );
+	}
+
+	& .cz-featured-stories__title {
+		margin: 0;
+		font-family: var( --cz-fs-title-font-family, var(--font-serif) );
+		font-weight: var( --cz-fs-title-weight, 700 );
+		font-size: var( --cz-fs-title-size-mobile, 18px );
+		line-height: 1.25;
+		color: var( --cz-fs-title-color, #0e1226 );
+	}
+
+	& .cz-featured-stories__excerpt {
+		margin: 0;
+		font-family: var( --cz-fs-body-font-family, var(--font-serif) );
+		font-size: var( --cz-fs-excerpt-size-mobile, 14px );
+		font-weight: 400;
+		line-height: 1.55;
+		color: var( --cz-fs-excerpt-color, #282f4c );
+	}
+
+	& .cz-featured-stories__link {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		margin-top: 2px;
+		font-family: var( --cz-fs-ui-font-family, var(--theme-font-family) );
+		font-size: 15px;
+		font-weight: 700;
+		text-decoration: none;
+		color: var( --cz-fs-link-color, var(--theme-palette-color-1, #0c1488) );
+		transition: color 140ms cubic-bezier(0.4, 0, 0.2, 1);
+
+		&:hover,
+		&:focus-visible {
+			color: var( --cz-fs-link-hover-color, var(--theme-palette-color-2, #c6a532) );
+		}
+
+		& svg {
+			flex: none;
+		}
+	}
+}
+
+@media (min-width: 600px) {
+	.cz-featured-stories {
+		& .cz-featured-stories__grid {
+			grid-template-columns: repeat( auto-fit, minmax( min( var( --cz-fs-min-card-width-tablet, 260px ), 100% ), 1fr ) );
+			gap: var( --cz-fs-grid-gap-tablet, 24px );
+		}
+
+		& .cz-featured-stories__meta {
+			font-size: var( --cz-fs-meta-size-tablet, 13px );
+		}
+
+		& .cz-featured-stories__title {
+			font-size: var( --cz-fs-title-size-tablet, 19px );
+		}
+
+		& .cz-featured-stories__excerpt {
+			font-size: var( --cz-fs-excerpt-size-tablet, 15px );
+		}
+	}
+}
+
+@media (min-width: 1000px) {
+	.cz-featured-stories {
+		& .cz-featured-stories__grid {
+			grid-template-columns: repeat( auto-fit, minmax( min( var( --cz-fs-min-card-width-desktop, 300px ), 100% ), 1fr ) );
+			gap: var( --cz-fs-grid-gap-desktop, 32px );
+		}
+
+		& .cz-featured-stories__meta {
+			font-size: var( --cz-fs-meta-size-desktop, 13px );
+		}
+
+		& .cz-featured-stories__title {
+			font-size: var( --cz-fs-title-size-desktop, 20px );
+		}
+
+		& .cz-featured-stories__excerpt {
+			font-size: var( --cz-fs-excerpt-size-desktop, 15px );
+		}
+	}
+}

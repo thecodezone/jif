@@ -1,0 +1,10 @@
+.cz-fs-responsive-control {
+	margin-bottom: 16px;
+}
+
+.cz-fs-responsive-control__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 4px;
+}

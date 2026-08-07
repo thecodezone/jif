@@ -2,6 +2,7 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	RichText,
+	URLInput,
 	useBlockProps,
 	InspectorControls,
 	PanelColorSettings,
@@ -78,6 +79,8 @@ export default function edit( { attributes, setAttributes } ) {
 	const {
 		beforeText,
 		afterText,
+		beforeUrl,
+		afterUrl,
 		icon,
 		iconColor,
 		iconSize,
@@ -148,6 +151,23 @@ export default function edit( { attributes, setAttributes } ) {
 						max={ 60 }
 						__nextHasNoMarginBottom
 					/>
+				</PanelBody>
+
+				<PanelBody title={ __( 'Links', 'jif' ) } initialOpen={ false }>
+					<BaseControl __nextHasNoMarginBottom>
+						<BaseControl.VisualLabel>{ __( '"Before" link', 'jif' ) }</BaseControl.VisualLabel>
+						<URLInput
+							value={ beforeUrl }
+							onChange={ ( value ) => setAttributes( { beforeUrl: value ?? '' } ) }
+						/>
+					</BaseControl>
+					<BaseControl __nextHasNoMarginBottom>
+						<BaseControl.VisualLabel>{ __( '"After" link', 'jif' ) }</BaseControl.VisualLabel>
+						<URLInput
+							value={ afterUrl }
+							onChange={ ( value ) => setAttributes( { afterUrl: value ?? '' } ) }
+						/>
+					</BaseControl>
 				</PanelBody>
 
 				<PanelBody title={ __( 'Typography', 'jif' ) } initialOpen={ false }>
@@ -235,7 +255,8 @@ export default function edit( { attributes, setAttributes } ) {
 			<div { ...blockProps }>
 				<div className="cz-comparison-bar__inner">
 					<RichText
-						tagName="div"
+						tagName={ beforeUrl ? 'a' : 'div' }
+						href={ beforeUrl ? beforeUrl : undefined }
 						className="cz-comparison-bar__before"
 						value={ beforeText }
 						onChange={ ( value ) => setAttributes( { beforeText: value } ) }
@@ -246,7 +267,8 @@ export default function edit( { attributes, setAttributes } ) {
 						{ renderIcon( icon, { className: 'cz-comparison-bar__icon-svg' } ) }
 					</div>
 					<RichText
-						tagName="div"
+						tagName={ afterUrl ? 'a' : 'div' }
+						href={ afterUrl ? afterUrl : undefined }
 						className="cz-comparison-bar__after"
 						value={ afterText }
 						onChange={ ( value ) => setAttributes( { afterText: value } ) }

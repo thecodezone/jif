@@ -20,6 +20,14 @@
 			"selector": ".cz-comparison-bar__after",
 			"default": "After"
 		},
+		"beforeUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"afterUrl": {
+			"type": "string",
+			"default": ""
+		},
 		"icon": {
 			"type": "string",
 			"default": "arrow-right"

@@ -14,7 +14,8 @@ export default function save( { attributes } ) {
 		<div { ...blockProps }>
 			<div className="cz-comparison-bar__inner">
 				<RichText.Content
-					tagName="div"
+					tagName={ attributes.beforeUrl ? 'a' : 'div' }
+					href={ attributes.beforeUrl ? attributes.beforeUrl : undefined }
 					className="cz-comparison-bar__before"
 					value={ attributes.beforeText }
 				/>
@@ -22,7 +23,8 @@ export default function save( { attributes } ) {
 					{ renderIcon( attributes.icon, { className: 'cz-comparison-bar__icon-svg' } ) }
 				</div>
 				<RichText.Content
-					tagName="div"
+					tagName={ attributes.afterUrl ? 'a' : 'div' }
+					href={ attributes.afterUrl ? attributes.afterUrl : undefined }
 					className="cz-comparison-bar__after"
 					value={ attributes.afterText }
 				/>

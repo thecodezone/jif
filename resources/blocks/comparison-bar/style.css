@@ -20,17 +20,26 @@
 }
 
 .cz-comparison-bar__before {
-	color: var(--cz-cb-before-color);
 	font-size: var(--cz-cb-before-size-mobile);
 	font-weight: var(--cz-cb-before-weight);
 	text-align: left;
 }
 
 .cz-comparison-bar__after {
-	color: var(--cz-cb-after-color);
 	font-size: var(--cz-cb-after-size-mobile);
 	font-weight: var(--cz-cb-after-weight);
 	text-align: right;
+}
+
+/* The color attribute only applies to unlinked text — a linked before/after
+   renders as an <a> and picks up the theme's default link styling instead,
+   per design (a link should look like a link, not a custom-colored label). */
+div.cz-comparison-bar__before {
+	color: var(--cz-cb-before-color);
+}
+
+div.cz-comparison-bar__after {
+	color: var(--cz-cb-after-color);
 }
 
 .cz-comparison-bar__before p,

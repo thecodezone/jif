@@ -130,7 +130,7 @@
 		},
 		"titleColor": {
 			"type": "string",
-			"default": "var(----theme-palette-color-15, #0e1226)"
+			"default": "var(--theme-palette-color-15, #0e1226)"
 		},
 		"excerptColor": {
 			"type": "string",

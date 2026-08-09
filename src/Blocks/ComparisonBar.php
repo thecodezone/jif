@@ -7,6 +7,7 @@
 
 namespace JifTheme\Blocks;
 
+use JifTheme\Helpers\Blocks;
 use JifTheme\Helpers\Vite;
 
 /**
@@ -76,7 +77,7 @@ class ComparisonBar {
 	 * JS bundle at all.
 	 */
 	public function enqueue_frontend_style(): void {
-		if ( ! has_block( 'cz/comparison-bar' ) ) {
+		if ( ! Blocks::page_has_block( 'cz/comparison-bar' ) ) {
 			return;
 		}
 

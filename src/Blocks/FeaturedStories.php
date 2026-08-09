@@ -7,6 +7,7 @@
 
 namespace JifTheme\Blocks;
 
+use JifTheme\Helpers\Blocks;
 use JifTheme\Helpers\Vite;
 
 /**
@@ -77,7 +78,7 @@ class FeaturedStories {
 	 * JS bundle at all.
 	 */
 	public function enqueue_frontend_style(): void {
-		if ( ! has_block( 'cz/featured-stories' ) ) {
+		if ( ! Blocks::page_has_block( 'cz/featured-stories' ) ) {
 			return;
 		}
 

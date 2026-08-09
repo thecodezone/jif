@@ -92,11 +92,11 @@
 }
 
 .brand-frame-wrap.is-visible .brand-frame-wrap__side--left .brand-frame-wrap__side-spin {
-	animation: brand-frame-spin-cw 120s linear 1.2s infinite;
+	animation: brand-frame-spin-cw 60s linear 1.2s infinite;
 }
 
 .brand-frame-wrap.is-visible .brand-frame-wrap__side--right .brand-frame-wrap__side-spin {
-	animation: brand-frame-spin-cw 120s linear 1.2s infinite;
+	animation: brand-frame-spin-cw 60s linear 1.2s infinite;
 }
 
 @keyframes brand-frame-in-left {

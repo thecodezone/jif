@@ -32,17 +32,17 @@
 			"type": "string",
 			"default": "arrow-right"
 		},
+		"iconStyle": {
+			"type": "string",
+			"default": "fa-sharp fa-solid"
+		},
 		"iconColor": {
 			"type": "string",
 			"default": " "
 		},
 		"iconSize": {
 			"type": "object",
-			"default": {
-				"desktop": 32,
-				"tablet": 28,
-				"mobile": 24
-			}
+			"default": {}
 		},
 		"beforeColor": {
 			"type": "string",
@@ -54,19 +54,11 @@
 		},
 		"beforeFontSize": {
 			"type": "object",
-			"default": {
-				"desktop": "var(--stk--preset--font-size--large, var(--wp--preset--font-size--large, 17px))",
-				"tablet": "var(--stk--preset--font-size--medium, var(--wp--preset--font-size--medium, 16px))",
-				"mobile": "var(--stk--preset--font-size--small, var(--wp--preset--font-size--small, 15px))"
-			}
+			"default": {}
 		},
 		"afterFontSize": {
 			"type": "object",
-			"default": {
-				"desktop": "var(--stk--preset--font-size--large, var(--wp--preset--font-size--large, 17px))",
-				"tablet": "var(--stk--preset--font-size--medium, var(--wp--preset--font-size--medium, 16px))",
-				"mobile": "var(--stk--preset--font-size--small, var(--wp--preset--font-size--small, 15px))"
-			}
+			"default": {}
 		},
 		"beforeFontWeight": {
 			"type": "string",
@@ -98,11 +90,7 @@
 		},
 		"padding": {
 			"type": "object",
-			"default": {
-				"desktop": 40,
-				"tablet": 30,
-				"mobile": 20
-			}
+			"default": {}
 		},
 		"stackOnMobile": {
 			"type": "boolean",

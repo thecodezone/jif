@@ -20,7 +20,7 @@ export default function save( { attributes } ) {
 					value={ attributes.beforeText }
 				/>
 				<div className="cz-comparison-bar__icon" aria-hidden="true">
-					{ renderIcon( attributes.icon, { className: 'cz-comparison-bar__icon-svg' } ) }
+					{ renderIcon( attributes.icon, attributes.iconStyle, { className: 'cz-comparison-bar__icon-svg' } ) }
 				</div>
 				<RichText.Content
 					tagName={ attributes.afterUrl ? 'a' : 'div' }

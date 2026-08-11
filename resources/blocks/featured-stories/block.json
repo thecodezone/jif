@@ -30,19 +30,11 @@
 		},
 		"minCardWidth": {
 			"type": "object",
-			"default": {
-				"desktop": 300,
-				"tablet": 260,
-				"mobile": 240
-			}
+			"default": {}
 		},
 		"gridGap": {
 			"type": "object",
-			"default": {
-				"desktop": 32,
-				"tablet": 24,
-				"mobile": 20
-			}
+			"default": {}
 		},
 		"cardPadding": {
 			"type": "number",
@@ -74,11 +66,7 @@
 		},
 		"titleFontSize": {
 			"type": "object",
-			"default": {
-				"desktop": 20,
-				"tablet": 19,
-				"mobile": 18
-			}
+			"default": {}
 		},
 		"titleFontWeight": {
 			"type": "string",
@@ -86,19 +74,11 @@
 		},
 		"excerptFontSize": {
 			"type": "object",
-			"default": {
-				"desktop": 15,
-				"tablet": 15,
-				"mobile": 14
-			}
+			"default": {}
 		},
 		"metaFontSize": {
 			"type": "object",
-			"default": {
-				"desktop": 13,
-				"tablet": 13,
-				"mobile": 12
-			}
+			"default": {}
 		},
 		"badgeFontSize": {
 			"type": "number",

@@ -4,6 +4,7 @@ import {
 	RichText,
 	URLInput,
 	useBlockProps,
+	useSettings,
 	InspectorControls,
 	PanelColorSettings,
 } from '@wordpress/block-editor';
@@ -69,8 +70,58 @@ function ResponsiveRange( { label, value, onChange, min, max, step } ) {
 				min={ min }
 				max={ max }
 				step={ step || 1 }
+				allowReset
+				resetFallbackValue={ undefined }
 				__nextHasNoMarginBottom
 			/>
+		</div>
+	);
+}
+
+/**
+ * Font size control backed by the theme's font-size presets (theme.json),
+ * with a "Custom" option that falls back to a responsive px slider.
+ */
+function FontSizeControl( { label, value, onChange, min, max, step } ) {
+	const [ fontSizes ] = useSettings( 'typography.fontSizes' );
+	const presets = fontSizes ?? [];
+
+	const presetVar = ( slug ) => `var(--wp--preset--font-size--${ slug })`;
+	const allSame = value?.desktop === value?.tablet && value?.tablet === value?.mobile;
+	const matchedPreset = allSame && presets.find( ( preset ) => presetVar( preset.slug ) === value?.desktop );
+
+	const options = [
+		...presets.map( ( preset ) => ( { label: preset.name, value: presetVar( preset.slug ) } ) ),
+		{ label: __( 'Custom…', 'jif' ), value: 'custom' },
+	];
+
+	const isCustom = ! matchedPreset;
+
+	return (
+		<div className="cz-cb-font-size-control">
+			<SelectControl
+				label={ label }
+				value={ isCustom ? 'custom' : value?.desktop }
+				options={ options }
+				onChange={ ( next ) => {
+					if ( next === 'custom' ) {
+						onChange( { desktop: min, tablet: min, mobile: min } );
+					} else {
+						onChange( { desktop: next, tablet: next, mobile: next } );
+					}
+				} }
+				__nextHasNoMarginBottom
+			/>
+			{ isCustom && (
+				<ResponsiveRange
+					label={ label }
+					value={ value }
+					onChange={ onChange }
+					min={ min }
+					max={ max }
+					step={ step }
+				/>
+			) }
 		</div>
 	);
 }
@@ -82,6 +133,7 @@ export default function edit( { attributes, setAttributes } ) {
 		beforeUrl,
 		afterUrl,
 		icon,
+		iconStyle,
 		iconColor,
 		iconSize,
 		beforeColor,
@@ -119,7 +171,9 @@ export default function edit( { attributes, setAttributes } ) {
 					<IconPicker
 						label={ __( 'Icon', 'jif' ) }
 						value={ icon }
+						style={ iconStyle }
 						onChange={ ( value ) => setAttributes( { icon: value } ) }
+						onStyleChange={ ( value ) => setAttributes( { iconStyle: value } ) }
 					/>
 					<ResponsiveRange
 						label={ __( 'Icon size', 'jif' ) }
@@ -189,7 +243,7 @@ export default function edit( { attributes, setAttributes } ) {
 							__nextHasNoMarginBottom
 						/>
 					) }
-					<ResponsiveRange
+					<FontSizeControl
 						label={ __( '"Before" font size', 'jif' ) }
 						value={ beforeFontSize }
 						onChange={ ( value ) => setAttributes( { beforeFontSize: value } ) }
@@ -203,7 +257,7 @@ export default function edit( { attributes, setAttributes } ) {
 						onChange={ ( value ) => setAttributes( { beforeFontWeight: value } ) }
 						__nextHasNoMarginBottom
 					/>
-					<ResponsiveRange
+					<FontSizeControl
 						label={ __( '"After" font size', 'jif' ) }
 						value={ afterFontSize }
 						onChange={ ( value ) => setAttributes( { afterFontSize: value } ) }
@@ -264,7 +318,7 @@ export default function edit( { attributes, setAttributes } ) {
 						allowedFormats={ [] }
 					/>
 					<div className="cz-comparison-bar__icon" aria-hidden="true">
-						{ renderIcon( icon, { className: 'cz-comparison-bar__icon-svg' } ) }
+						{ renderIcon( icon, iconStyle, { className: 'cz-comparison-bar__icon-svg' } ) }
 					</div>
 					<RichText
 						tagName={ afterUrl ? 'a' : 'div' }

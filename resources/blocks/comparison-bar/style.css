@@ -66,15 +66,13 @@ div.cz-comparison-bar__after {
 }
 
 /*
- * Sized by height only (like a font glyph) so each icon's own aspect ratio
- * is preserved — wide icons render wider, tall/narrow icons render narrower,
- * with no forced square box padding the glyph with empty space. The bar's
+ * Font Awesome icons size via font-size, like any other glyph — this keeps
+ * each icon's own aspect ratio intact with no forced square box. The bar's
  * own height is driven by its padding/text, not the icon.
  */
 .cz-comparison-bar__icon-svg {
-	height: var(--cz-cb-icon-size-mobile);
-	width: auto;
-	fill: currentColor;
+	font-size: var(--cz-cb-icon-size-mobile);
+	color: currentColor;
 }
 
 /* Stack before/after vertically on mobile when the block opts in, since a
@@ -112,7 +110,7 @@ div.cz-comparison-bar__after {
 	}
 
 	.cz-comparison-bar__icon-svg {
-		height: var(--cz-cb-icon-size-tablet);
+		font-size: var(--cz-cb-icon-size-tablet);
 	}
 
 	.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__inner {
@@ -151,6 +149,6 @@ div.cz-comparison-bar__after {
 	}
 
 	.cz-comparison-bar__icon-svg {
-		height: var(--cz-cb-icon-size-desktop);
+		font-size: var(--cz-cb-icon-size-desktop);
 	}
 }

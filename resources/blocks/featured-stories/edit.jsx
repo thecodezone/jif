@@ -2,6 +2,7 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	useBlockProps,
+	useSettings,
 	InspectorControls,
 	PanelColorSettings,
 } from '@wordpress/block-editor';

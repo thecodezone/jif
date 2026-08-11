@@ -1,4 +1,4 @@
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	RichText,
@@ -21,6 +21,7 @@ import {
 import { desktop, tablet, mobile } from '@wordpress/icons';
 import { renderIcon } from './icons';
 import { IconPicker } from './icon-picker';
+import { fetchIconSvg } from './icon-search';
 import { buildBarStyleVars } from './style-vars';
 
 const DEVICES = [
@@ -134,6 +135,7 @@ export default function edit( { attributes, setAttributes } ) {
 		afterUrl,
 		icon,
 		iconStyle,
+		iconSvg,
 		iconColor,
 		iconSize,
 		beforeColor,
@@ -150,6 +152,24 @@ export default function edit( { attributes, setAttributes } ) {
 		padding,
 		stackOnMobile,
 	} = attributes;
+
+	// Keep iconSvg (the value actually saved/rendered — see icons.jsx) in sync
+	// with icon/iconStyle, so older content saved before iconSvg existed (or
+	// a style change that intentionally cleared it) self-heals on next edit.
+	useEffect( () => {
+		if ( iconSvg || ! icon ) {
+			return;
+		}
+		let isMounted = true;
+		fetchIconSvg( icon, iconStyle ).then( ( svg ) => {
+			if ( isMounted && svg ) {
+				setAttributes( { iconSvg: svg } );
+			}
+		} );
+		return () => {
+			isMounted = false;
+		};
+	}, [ icon, iconStyle, iconSvg ] );
 
 	const blockProps = useBlockProps( {
 		className: [ 'cz-comparison-bar', stackOnMobile ? 'is-stacked-mobile' : '' ]
@@ -172,8 +192,8 @@ export default function edit( { attributes, setAttributes } ) {
 						label={ __( 'Icon', 'jif' ) }
 						value={ icon }
 						style={ iconStyle }
-						onChange={ ( value ) => setAttributes( { icon: value } ) }
-						onStyleChange={ ( value ) => setAttributes( { iconStyle: value } ) }
+						onChange={ ( name, svg ) => setAttributes( { icon: name, iconSvg: svg } ) }
+						onStyleChange={ ( value ) => setAttributes( { iconStyle: value, iconSvg: '' } ) }
 					/>
 					<ResponsiveRange
 						label={ __( 'Icon size', 'jif' ) }
@@ -318,7 +338,7 @@ export default function edit( { attributes, setAttributes } ) {
 						allowedFormats={ [] }
 					/>
 					<div className="cz-comparison-bar__icon" aria-hidden="true">
-						{ renderIcon( icon, iconStyle, { className: 'cz-comparison-bar__icon-svg' } ) }
+						{ renderIcon( icon, iconStyle, iconSvg, { className: 'cz-comparison-bar__icon-svg' } ) }
 					</div>
 					<RichText
 						tagName={ afterUrl ? 'a' : 'div' }

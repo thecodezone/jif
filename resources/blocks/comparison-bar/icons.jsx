@@ -11,15 +11,31 @@ export const ICON_STYLES = [
 ];
 
 /**
- * Render a Font Awesome icon as an <i> element whose classes are resolved by
- * the Font Awesome Kit script at runtime (enqueued via Stackable).
+ * Render a Font Awesome icon. Prefers the real fetched SVG markup (saved in
+ * the iconSvg attribute when the icon was picked — see icon-picker.jsx),
+ * since that's a static string with no runtime dependency on Font Awesome's
+ * webfont CSS having loaded. Falls back to an <i> class reference only for
+ * content saved before iconSvg existed.
  *
  * @param {string} slug    Icon name (e.g. "heart"), without the "fa-" prefix.
  * @param {string} style   FA style classes (e.g. "fa-sharp fa-solid").
- * @param {Object} [props] Extra props merged onto the <i> (e.g. className).
+ * @param {string} svg     Fetched <svg>...</svg> markup, if available.
+ * @param {Object} [props] Extra props merged onto the rendered element (e.g. className).
  * @return {JSX.Element} The rendered icon.
  */
-export function renderIcon( slug, style, props = {} ) {
+export function renderIcon( slug, style, svg, props = {} ) {
+	if ( svg ) {
+		const { className, ...rest } = props;
+		return (
+			<span
+				className={ className }
+				{ ...rest }
+				// eslint-disable-next-line react/no-danger
+				dangerouslySetInnerHTML={ { __html: svg } }
+			/>
+		);
+	}
+
 	const name = slug || DEFAULT_ICON_NAME;
 	const styleClasses = style || DEFAULT_ICON_STYLE;
 	const { className, ...rest } = props;

@@ -36,6 +36,10 @@
 			"type": "string",
 			"default": "fa-sharp fa-solid"
 		},
+		"iconSvg": {
+			"type": "string",
+			"default": ""
+		},
 		"iconColor": {
 			"type": "string",
 			"default": " "
@@ -54,11 +58,19 @@
 		},
 		"beforeFontSize": {
 			"type": "object",
-			"default": {}
+			"default": {
+				"desktop": "var(--wp--preset--font-size--medium)",
+				"tablet": "var(--wp--preset--font-size--medium)",
+				"mobile": "var(--wp--preset--font-size--medium)"
+			}
 		},
 		"afterFontSize": {
 			"type": "object",
-			"default": {}
+			"default": {
+				"desktop": "var(--wp--preset--font-size--medium)",
+				"tablet": "var(--wp--preset--font-size--medium)",
+				"mobile": "var(--wp--preset--font-size--medium)"
+			}
 		},
 		"beforeFontWeight": {
 			"type": "string",

@@ -3,6 +3,7 @@ import { arrowRight } from '@wordpress/icons';
 import metadata from './block.json';
 import edit from './edit';
 import save from './save';
+import deprecated from './deprecated';
 import './style.css';
 import './editor.css';
 
@@ -11,4 +12,5 @@ registerBlockType( metadata.name, {
 	icon: arrowRight,
 	edit,
 	save,
+	deprecated,
 } );

@@ -91,8 +91,58 @@ function ResponsiveRange( { label, value, onChange, min, max, step } ) {
 				min={ min }
 				max={ max }
 				step={ step || 1 }
+				allowReset
+				resetFallbackValue={ undefined }
 				__nextHasNoMarginBottom
 			/>
+		</div>
+	);
+}
+
+/**
+ * Font size control backed by the theme's font-size presets (theme.json),
+ * with a "Custom" option that falls back to a responsive px slider.
+ */
+function FontSizeControl( { label, value, onChange, min, max, step } ) {
+	const [ fontSizes ] = useSettings( 'typography.fontSizes' );
+	const presets = fontSizes ?? [];
+
+	const presetVar = ( slug ) => `var(--wp--preset--font-size--${ slug })`;
+	const allSame = value?.desktop === value?.tablet && value?.tablet === value?.mobile;
+	const matchedPreset = allSame && presets.find( ( preset ) => presetVar( preset.slug ) === value?.desktop );
+
+	const options = [
+		...presets.map( ( preset ) => ( { label: preset.name, value: presetVar( preset.slug ) } ) ),
+		{ label: __( 'Custom…', 'jif' ), value: 'custom' },
+	];
+
+	const isCustom = ! matchedPreset;
+
+	return (
+		<div className="cz-fs-font-size-control">
+			<SelectControl
+				label={ label }
+				value={ isCustom ? 'custom' : value?.desktop }
+				options={ options }
+				onChange={ ( next ) => {
+					if ( next === 'custom' ) {
+						onChange( { desktop: min, tablet: min, mobile: min } );
+					} else {
+						onChange( { desktop: next, tablet: next, mobile: next } );
+					}
+				} }
+				__nextHasNoMarginBottom
+			/>
+			{ isCustom && (
+				<ResponsiveRange
+					label={ label }
+					value={ value }
+					onChange={ onChange }
+					min={ min }
+					max={ max }
+					step={ step }
+				/>
+			) }
 		</div>
 	);
 }
@@ -247,7 +297,7 @@ export default function edit( { attributes, setAttributes } ) {
 						value={ uiFontFamily }
 						onChange={ ( value ) => setAttributes( { uiFontFamily: value } ) }
 					/>
-					<ResponsiveRange
+					<FontSizeControl
 						label={ __( 'Title font size', 'jif' ) }
 						value={ titleFontSize }
 						onChange={ ( value ) => setAttributes( { titleFontSize: value } ) }
@@ -261,14 +311,14 @@ export default function edit( { attributes, setAttributes } ) {
 						onChange={ ( value ) => setAttributes( { titleFontWeight: value } ) }
 						__nextHasNoMarginBottom
 					/>
-					<ResponsiveRange
+					<FontSizeControl
 						label={ __( 'Excerpt font size', 'jif' ) }
 						value={ excerptFontSize }
 						onChange={ ( value ) => setAttributes( { excerptFontSize: value } ) }
 						min={ 11 }
 						max={ 22 }
 					/>
-					<ResponsiveRange
+					<FontSizeControl
 						label={ __( 'Meta text font size', 'jif' ) }
 						value={ metaFontSize }
 						onChange={ ( value ) => setAttributes( { metaFontSize: value } ) }

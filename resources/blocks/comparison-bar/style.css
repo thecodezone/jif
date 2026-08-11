@@ -66,13 +66,22 @@ div.cz-comparison-bar__after {
 }
 
 /*
- * Font Awesome icons size via font-size, like any other glyph — this keeps
- * each icon's own aspect ratio intact with no forced square box. The bar's
- * own height is driven by its padding/text, not the icon.
+ * The icon is a real inline <svg> (fetched and saved as markup — see
+ * icons.jsx), not a webfont glyph, so font-size alone doesn't size it.
+ * The wrapper span gets an explicit box and the svg fills it, preserving
+ * the icon's own aspect ratio. The bar's own height is driven by its
+ * padding/text, not the icon.
  */
 .cz-comparison-bar__icon-svg {
-	font-size: var(--cz-cb-icon-size-mobile);
+	display: flex;
+	width: var(--cz-cb-icon-size-mobile);
+	height: var(--cz-cb-icon-size-mobile);
 	color: currentColor;
+}
+
+.cz-comparison-bar__icon-svg svg {
+	width: 100%;
+	height: 100%;
 }
 
 /* Stack before/after vertically on mobile when the block opts in, since a
@@ -110,7 +119,8 @@ div.cz-comparison-bar__after {
 	}
 
 	.cz-comparison-bar__icon-svg {
-		font-size: var(--cz-cb-icon-size-tablet);
+		width: var(--cz-cb-icon-size-tablet);
+		height: var(--cz-cb-icon-size-tablet);
 	}
 
 	.cz-comparison-bar.is-stacked-mobile .cz-comparison-bar__inner {
@@ -149,6 +159,7 @@ div.cz-comparison-bar__after {
 	}
 
 	.cz-comparison-bar__icon-svg {
-		font-size: var(--cz-cb-icon-size-desktop);
+		width: var(--cz-cb-icon-size-desktop);
+		height: var(--cz-cb-icon-size-desktop);
 	}
 }

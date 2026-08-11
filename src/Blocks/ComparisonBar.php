@@ -59,6 +59,15 @@ class ComparisonBar {
 		if ( is_array( $assets ) ) {
 			if ( ! empty( $assets['scripts'] ) ) {
 				$args['editor_script_handles'] = $assets['scripts'];
+
+				wp_localize_script(
+					$assets['scripts'][0],
+					'czFontAwesomeKit',
+					array(
+						'token'   => get_option( 'stackable_icons_fa_kit', '' ),
+						'version' => get_option( 'stackable_icons_fa_version', '' ),
+					)
+				);
 			}
 
 			if ( ! empty( $assets['styles'] ) ) {

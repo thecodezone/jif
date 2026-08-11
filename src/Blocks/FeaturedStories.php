@@ -148,51 +148,36 @@ class FeaturedStories {
 	 * @return string CSS custom property declarations, e.g. "--cz-fs-x:1px;--cz-fs-y:2px;".
 	 */
 	public static function build_style_vars( array $attributes ): string {
-		$min_card_width = $attributes['minCardWidth'] ?? array();
-		$grid_gap       = $attributes['gridGap'] ?? array();
-		$title_size     = $attributes['titleFontSize'] ?? array();
-		$excerpt_size   = $attributes['excerptFontSize'] ?? array();
-		$meta_size      = $attributes['metaFontSize'] ?? array();
-
 		$vars = array(
-			'--cz-fs-title-font-family'      => $attributes['titleFontFamily'] ?? 'var(--font-serif)',
-			'--cz-fs-body-font-family'       => $attributes['bodyFontFamily'] ?? 'var(--font-serif)',
-			'--cz-fs-ui-font-family'         => $attributes['uiFontFamily'] ?? 'var(--theme-font-family)',
-			'--cz-fs-min-card-width-desktop' => ( $min_card_width['desktop'] ?? 300 ) . 'px',
-			'--cz-fs-min-card-width-tablet'  => ( $min_card_width['tablet'] ?? 260 ) . 'px',
-			'--cz-fs-min-card-width-mobile'  => ( $min_card_width['mobile'] ?? 240 ) . 'px',
-			'--cz-fs-grid-gap-desktop'       => ( $grid_gap['desktop'] ?? 32 ) . 'px',
-			'--cz-fs-grid-gap-tablet'        => ( $grid_gap['tablet'] ?? 24 ) . 'px',
-			'--cz-fs-grid-gap-mobile'        => ( $grid_gap['mobile'] ?? 20 ) . 'px',
-			'--cz-fs-card-padding'           => ( $attributes['cardPadding'] ?? 24 ) . 'px',
-			'--cz-fs-image-aspect-ratio'     => $attributes['imageAspectRatio'] ?? '16 / 10',
-			'--cz-fs-border-width'           => ( $attributes['borderWidth'] ?? 1 ) . 'px',
-			'--cz-fs-border-radius'          => ( $attributes['borderRadius'] ?? 12 ) . 'px',
-			'--cz-fs-title-size-desktop'     => ( $title_size['desktop'] ?? 20 ) . 'px',
-			'--cz-fs-title-size-tablet'      => ( $title_size['tablet'] ?? 19 ) . 'px',
-			'--cz-fs-title-size-mobile'      => ( $title_size['mobile'] ?? 18 ) . 'px',
-			'--cz-fs-title-weight'           => $attributes['titleFontWeight'] ?? '700',
-			'--cz-fs-excerpt-size-desktop'   => ( $excerpt_size['desktop'] ?? 15 ) . 'px',
-			'--cz-fs-excerpt-size-tablet'    => ( $excerpt_size['tablet'] ?? 15 ) . 'px',
-			'--cz-fs-excerpt-size-mobile'    => ( $excerpt_size['mobile'] ?? 14 ) . 'px',
-			'--cz-fs-meta-size-desktop'      => ( $meta_size['desktop'] ?? 13 ) . 'px',
-			'--cz-fs-meta-size-tablet'       => ( $meta_size['tablet'] ?? 13 ) . 'px',
-			'--cz-fs-meta-size-mobile'       => ( $meta_size['mobile'] ?? 12 ) . 'px',
-			'--cz-fs-badge-size'             => ( $attributes['badgeFontSize'] ?? 13 ) . 'px',
-			'--cz-fs-background'             => $attributes['backgroundColor'] ?? '#ffffff',
-			'--cz-fs-border-color'           => $attributes['borderColor'] ?? '#e2e5f1',
-			'--cz-fs-media-bg'               => $attributes['mediaBackgroundColor'] ?? '#dde5ff',
-			'--cz-fs-media-icon'             => $attributes['mediaIconColor'] ?? '#9db4f0',
-			'--cz-fs-badge-bg'               => $attributes['badgeBackgroundColor'] ?? 'var(--theme-palette-color-1, #0c1488)',
-			'--cz-fs-badge-text'             => $attributes['badgeTextColor'] ?? '#ffffff',
-			'--cz-fs-title-color'            => $attributes['titleColor'] ?? '#0e1226',
-			'--cz-fs-excerpt-color'          => $attributes['excerptColor'] ?? '#282f4c',
-			'--cz-fs-meta-color'             => $attributes['metaColor'] ?? '#6d7497',
-			'--cz-fs-link-color'             => $attributes['linkColor'] ?? 'var(--theme-palette-color-1, #0c1488)',
-			'--cz-fs-link-hover-color'       => $attributes['linkHoverColor'] ?? 'var(--theme-palette-color-2, #c6a532)',
-			'--cz-fs-shadow'                 => $attributes['shadow'] ?? '0 2px 6px rgba(12, 20, 136, 0.07)',
-			'--cz-fs-shadow-hover'           => $attributes['shadowHover'] ?? '0 8px 20px rgba(12, 20, 136, 0.09)',
+			'--cz-fs-title-font-family'  => $attributes['titleFontFamily'] ?? 'var(--font-serif)',
+			'--cz-fs-body-font-family'   => $attributes['bodyFontFamily'] ?? 'var(--font-serif)',
+			'--cz-fs-ui-font-family'     => $attributes['uiFontFamily'] ?? 'var(--theme-font-family)',
+			'--cz-fs-card-padding'       => ( $attributes['cardPadding'] ?? 24 ) . 'px',
+			'--cz-fs-image-aspect-ratio' => $attributes['imageAspectRatio'] ?? '16 / 10',
+			'--cz-fs-border-width'       => ( $attributes['borderWidth'] ?? 1 ) . 'px',
+			'--cz-fs-border-radius'      => ( $attributes['borderRadius'] ?? 12 ) . 'px',
+			'--cz-fs-title-weight'       => $attributes['titleFontWeight'] ?? '700',
+			'--cz-fs-badge-size'         => ( $attributes['badgeFontSize'] ?? 13 ) . 'px',
+			'--cz-fs-background'         => $attributes['backgroundColor'] ?? '#ffffff',
+			'--cz-fs-border-color'       => $attributes['borderColor'] ?? '#e2e5f1',
+			'--cz-fs-media-bg'           => $attributes['mediaBackgroundColor'] ?? '#dde5ff',
+			'--cz-fs-media-icon'         => $attributes['mediaIconColor'] ?? '#9db4f0',
+			'--cz-fs-badge-bg'           => $attributes['badgeBackgroundColor'] ?? 'var(--theme-palette-color-1, #0c1488)',
+			'--cz-fs-badge-text'         => $attributes['badgeTextColor'] ?? '#ffffff',
+			'--cz-fs-title-color'        => $attributes['titleColor'] ?? '#0e1226',
+			'--cz-fs-excerpt-color'      => $attributes['excerptColor'] ?? '#282f4c',
+			'--cz-fs-meta-color'         => $attributes['metaColor'] ?? '#6d7497',
+			'--cz-fs-link-color'         => $attributes['linkColor'] ?? 'var(--theme-palette-color-1, #0c1488)',
+			'--cz-fs-link-hover-color'   => $attributes['linkHoverColor'] ?? 'var(--theme-palette-color-2, #c6a532)',
+			'--cz-fs-shadow'             => $attributes['shadow'] ?? '0 2px 6px rgba(12, 20, 136, 0.07)',
+			'--cz-fs-shadow-hover'       => $attributes['shadowHover'] ?? '0 8px 20px rgba(12, 20, 136, 0.09)',
 		);
+
+		self::add_responsive_vars( $vars, '--cz-fs-min-card-width', $attributes['minCardWidth'] ?? array() );
+		self::add_responsive_vars( $vars, '--cz-fs-grid-gap', $attributes['gridGap'] ?? array() );
+		self::add_responsive_vars( $vars, '--cz-fs-title-size', $attributes['titleFontSize'] ?? array() );
+		self::add_responsive_vars( $vars, '--cz-fs-excerpt-size', $attributes['excerptFontSize'] ?? array() );
+		self::add_responsive_vars( $vars, '--cz-fs-meta-size', $attributes['metaFontSize'] ?? array() );
 
 		$declarations = '';
 
@@ -201,5 +186,35 @@ class FeaturedStories {
 		}
 
 		return $declarations;
+	}
+
+	/**
+	 * Add the three per-device variables for a responsive attribute, cascading
+	 * an unset device down from the one above it (tablet falls back to
+	 * desktop, mobile falls back to tablet) and omitting any device that is
+	 * still unset once cascaded, so the block's own CSS fallback/inheritance
+	 * applies instead of forcing a value. Mirrors comparison-bar's
+	 * style-vars.js addResponsiveVars().
+	 *
+	 * @param array  $vars  Vars array to mutate.
+	 * @param string $name  CSS variable base name (without the -desktop/-tablet/-mobile suffix).
+	 * @param array  $value Responsive attribute value ({ desktop, tablet, mobile }).
+	 */
+	private static function add_responsive_vars( array &$vars, string $name, array $value ): void {
+		$desktop = $value['desktop'] ?? null;
+		$tablet  = $value['tablet'] ?? $desktop;
+		$mobile  = $value['mobile'] ?? $tablet;
+
+		$resolved = array(
+			'desktop' => $desktop,
+			'tablet'  => $tablet,
+			'mobile'  => $mobile,
+		);
+
+		foreach ( $resolved as $device => $device_value ) {
+			if ( null !== $device_value ) {
+				$vars[ "{$name}-{$device}" ] = is_numeric( $device_value ) ? $device_value . 'px' : $device_value;
+			}
+		}
 	}
 }

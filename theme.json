@@ -55,18 +55,18 @@
         },
         {
           "fluid": {
-            "min": "22px",
-            "max": "24px"
+            "min": "24px",
+            "max": "32px"
           },
-          "size": "24px",
+          "size": "32px",
           "slug": "x-large"
         },
         {
           "fluid": {
-            "min": "28px",
-            "max": "32px"
+            "min": "44px",
+            "max": "80px"
           },
-          "size": "32px",
+          "size": "80px",
           "slug": "xx-large"
         }
       ]

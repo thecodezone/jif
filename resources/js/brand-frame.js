@@ -19,29 +19,18 @@ function initBrandFrames() {
 
 		target.parentNode.insertBefore( wrap, target );
 
-		var left = document.createElement( 'img' );
-		left.className = 'brand-frame-wrap__side-spin';
-		left.src = settings.left || '';
-		left.alt = '';
-		left.setAttribute( 'aria-hidden', 'true' );
+		var spin = document.createElement( 'img' );
+		spin.className = 'brand-frame-wrap__spin';
+		spin.src = settings.frame || '';
+		spin.alt = '';
+		spin.setAttribute( 'aria-hidden', 'true' );
 
-		var leftSide = document.createElement( 'span' );
-		leftSide.className = 'brand-frame-wrap__side brand-frame-wrap__side--left';
-		leftSide.appendChild( left );
-
-		var right = document.createElement( 'img' );
-		right.className = 'brand-frame-wrap__side-spin';
-		right.src = settings.right || '';
-		right.alt = '';
-		right.setAttribute( 'aria-hidden', 'true' );
-
-		var rightSide = document.createElement( 'span' );
-		rightSide.className = 'brand-frame-wrap__side brand-frame-wrap__side--right';
-		rightSide.appendChild( right );
+		var frame = document.createElement( 'span' );
+		frame.className = 'brand-frame-wrap__frame';
+		frame.appendChild( spin );
 
 		wrap.appendChild( target );
-		wrap.appendChild( leftSide );
-		wrap.appendChild( rightSide );
+		wrap.appendChild( frame );
 
 		wraps.push( wrap );
 	} );

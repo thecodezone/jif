@@ -82,7 +82,7 @@ class ThemeTest extends TestCase {
 		$theme = new Theme( $vite );
 
 		Functions\expect( 'get_template_directory_uri' )->once()->andReturn( 'https://example.com/parent' );
-		Functions\expect( 'get_stylesheet_directory_uri' )->times( 3 )->andReturn( 'https://example.com/child' );
+		Functions\expect( 'get_stylesheet_directory_uri' )->times( 2 )->andReturn( 'https://example.com/child' );
 
 		Functions\expect( 'wp_enqueue_style' )
 			->once()

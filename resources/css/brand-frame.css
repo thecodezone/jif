@@ -1,58 +1,53 @@
 /*
- * Brand frame: left.svg + right.svg flanking a circular stackable image,
- * with staggered entrance animation and a slow pan on the center image.
+ * Brand frame: a single ring SVG spinning around a square, circularly-cropped
+ * stackable image, with staggered entrance animation.
  */
 
 .brand-frame-wrap {
+	--brand-frame-opacity: .75;
+	--brand-frame-image-opacity: 1;
+	--brand-frame-spin-duration: 20s;
+
 	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	aspect-ratio: 1 / 1;
+	border-radius: 50%;
+	overflow: hidden;
 }
 
-.brand-frame-wrap__side {
+.brand-frame-wrap .stk-img-wrapper {
+
+}
+
+.brand-frame-wrap .stk-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.brand-frame-wrap .wp-block-stackable-image {
+	margin-bottom: 0px;
+}
+
+.brand-frame-wrap__frame {
 	position: absolute;
 	top: 50%;
+	left: 0;
 	display: block;
 	width: 100%;
 	height: 100%;
-	transform: translateY(-50%);
+	transform: translate(0, -50%);
 	opacity: 0;
 	z-index: 2;
 	pointer-events: none;
 }
 
-.brand-frame-wrap .stk-img {
-	transform: translateY(3%);
-}
-
-.brand-frame-wrap .stk-img-wrapper {
-	overflow: visible;
-}
-
-.brand-frame-wrap__side-spin {
+.brand-frame-wrap__spin {
 	display: block;
 	width: 100%;
 	height: 100%;
-}
-
-.brand-frame-wrap__side-spin img {
-	display: block;
-	width: 100%;
-	height: 100%;
-}
-
-
-.brand-frame-wrap__side--left {
-	left: 0;
-	transform: translate(-40px, -50%);
-}
-
-.brand-frame-wrap__side--right {
-	right: 0;
-	height: 87%;
-	width: 87%;
-	transform: translate(40px, -50%);
 }
 
 .brand-frame-wrap .brand-frame {
@@ -60,64 +55,33 @@
 	z-index: 1;
 	opacity: 0;
 	transform: translateY(24px);
+	mix-blend-mode: multiply;
 }
 
-/* Entrance animation, staggered: left, then right, then center. */
+/* Entrance animation, staggered: frame, then center image. */
 
-.brand-frame-wrap.is-visible .brand-frame-wrap__side--left {
-	animation: brand-frame-in-left 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0s forwards;
-}
-
-.brand-frame-wrap.is-visible .brand-frame-wrap__side--right {
-	animation: brand-frame-in-right 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+.brand-frame-wrap.is-visible .brand-frame-wrap__frame {
+	animation: brand-frame-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0s forwards;
 }
 
 .brand-frame-wrap.is-visible .brand-frame {
 	animation: brand-frame-in-center 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
 }
 
-/*
- * Continuous rotation, once the frame has entered: each side spins the opposite direction,
- * pivoting around the wrap's center rather than each crescent's own center. The origin
- * offsets below correct for the --left/--right sides' own size and translate() offset,
- * so both crescents rotate around the same shared point (the circular image's center).
- */
+/* Continuous rotation, once the frame has entered, pivoting around its own center. */
 
-.brand-frame-wrap__side--left .brand-frame-wrap__side-spin {
-	transform-origin: 65% 50%;
+.brand-frame-wrap.is-visible .brand-frame-wrap__spin {
+	animation: brand-frame-spin-cw var(--brand-frame-spin-duration) linear 1.2s infinite;
 }
 
-.brand-frame-wrap__side--right .brand-frame-wrap__side-spin {
-	transform-origin: 29.53% 50%;
-}
-
-.brand-frame-wrap.is-visible .brand-frame-wrap__side--left .brand-frame-wrap__side-spin {
-	animation: brand-frame-spin-cw 60s linear 1.2s infinite;
-}
-
-.brand-frame-wrap.is-visible .brand-frame-wrap__side--right .brand-frame-wrap__side-spin {
-	animation: brand-frame-spin-cw 60s linear 1.2s infinite;
-}
-
-@keyframes brand-frame-in-left {
+@keyframes brand-frame-in {
 	from {
 		opacity: 0;
-		transform: translate(-40px, -50%);
+		transform: translate(0, -50%) scale(0.94);
 	}
 	to {
-		opacity: 1;
-		transform: translate(-15%, -50%);
-	}
-}
-
-@keyframes brand-frame-in-right {
-	from {
-		opacity: 0;
-		transform: translate(40px, -50%);
-	}
-	to {
-		opacity: 1;
-		transform: translate(13%, -50%);
+		opacity: var(--brand-frame-opacity);
+		transform: translate(0, -50%) scale(1);
 	}
 }
 
@@ -127,7 +91,7 @@
 		transform: translateY(24px);
 	}
 	to {
-		opacity: 1;
+		opacity: var(--brand-frame-image-opacity);
 		transform: translateY(0);
 	}
 }
@@ -141,28 +105,20 @@
 	}
 }
 
-@keyframes brand-frame-spin-ccw {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(-360deg);
-	}
-}
-
 @media (prefers-reduced-motion: reduce) {
-	.brand-frame-wrap__side,
-	.brand-frame-wrap .brand-frame {
-		opacity: 1;
+	.brand-frame-wrap__frame {
+		opacity: var(--brand-frame-opacity);
 		transform: none;
 		animation: none !important;
 	}
 
-	.brand-frame-wrap__side-spin {
+	.brand-frame-wrap .brand-frame {
+		opacity: var(--brand-frame-image-opacity);
+		transform: none;
 		animation: none !important;
 	}
 
-	.brand-frame-wrap.is-visible .brand-frame .stk-img-wrapper img {
+	.brand-frame-wrap__spin {
 		animation: none !important;
 	}
 }

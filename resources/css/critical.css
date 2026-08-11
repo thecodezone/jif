@@ -75,3 +75,7 @@
 	color: var(--theme-palette-color-1);
 	border-bottom-color: var(--theme-palette-color-10);
 }
+
+.header-menu-1.menu-container .sub-menu .ct-menu-link {
+	text-decoration: none;
+}

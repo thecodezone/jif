@@ -66,8 +66,7 @@ class Theme {
 			'jif-theme',
 			'jifBrandFrame',
 			array(
-				'left'  => get_stylesheet_directory_uri() . '/assets/left-color.svg',
-				'right' => get_stylesheet_directory_uri() . '/assets/right-color.svg',
+				'frame' => get_stylesheet_directory_uri() . '/assets/brand-ring.svg',
 			)
 		);
 

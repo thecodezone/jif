@@ -31,7 +31,7 @@
       "fontSizes": [
         {
           "fluid": {
-            "min": "`12px",
+            "min": "12px",
             "max": "13px"
           },
           "size": "13px",

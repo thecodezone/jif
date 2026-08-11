@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-# Build the theme release zip locally, mirroring .github/workflows/release.yml's
-# build job. Useful when GitHub Actions is unavailable.
+# Build the theme release zip. Used both locally and by
+# .github/workflows/release.yml, so the packaged file list only has to be
+# maintained in one place.
 #
 # Builds in a clean temporary copy so the local vendor/ and node_modules/ are
 # never touched — running `composer install --no-dev` in place would strip
@@ -54,7 +55,7 @@ npm run build
 
 echo "Packaging release..."
 mkdir jif
-cp -r config functions.php src style.css vendor assets resources composer.json composer.lock jif/
+cp -r config functions.php src style.css theme.json vendor assets resources composer.json composer.lock jif/
 zip -r jif.zip jif >/dev/null
 
 cp jif.zip "$THEME_ROOT/jif.zip"

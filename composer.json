@@ -30,7 +30,7 @@
         "lint": "phpcs",
         "lint:fix": "phpcbf",
         "version": "bin/version.sh",
-        "release": "bin/build-release.sh"
+        "release": "bin/release.sh"
     },
     "config": {
         "platform": {

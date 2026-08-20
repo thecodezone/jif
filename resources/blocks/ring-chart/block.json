@@ -11,10 +11,8 @@
 		"rings": {
 			"type": "array",
 			"default": [
-				{ "label": "Participant", "color": "var(--theme-palette-color-1, #0c1488)" },
-				{ "label": "Family", "color": "#3049b0" },
-				{ "label": "Community", "color": "#7d93da" },
-				{ "label": "Future Generations", "color": "#c5d7ff" }
+				{ "label": "", "color": "var(--theme-palette-color-1)" },
+				{ "label": "", "color": "var(--theme-palette-color-2)" }
 			]
 		},
 		"coreSize": {
@@ -59,7 +57,11 @@
 		},
 		"ringLabelColor": {
 			"type": "string",
-			"default": "var(--theme-palette-color-1, #0c1488)"
+			"default": "var(--theme-palette-color-1)"
+		},
+		"eyebrowColor": {
+			"type": "string",
+			"default": "var(--theme-palette-color-2)"
 		},
 		"backgroundColor": {
 			"type": "string",

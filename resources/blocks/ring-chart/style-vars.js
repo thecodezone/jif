@@ -54,6 +54,7 @@ export function buildRingChartStyleVars( attributes ) {
 		fontFamily,
 		coreLabelColor,
 		ringLabelColor,
+		eyebrowColor,
 		backgroundColor,
 	} = attributes;
 
@@ -62,7 +63,8 @@ export function buildRingChartStyleVars( attributes ) {
 		'--cz-rc-font-family': fontFamily,
 		'--cz-rc-label-weight': labelFontWeight ?? '700',
 		'--cz-rc-core-label-color': coreLabelColor || '#ffffff',
-		'--cz-rc-ring-label-color': ringLabelColor || 'var(--theme-palette-color-1, #0c1488)',
+		'--cz-rc-ring-label-color': ringLabelColor || 'var(--theme-palette-color-1)',
+		'--cz-rc-eyebrow-color': eyebrowColor || 'var(--theme-palette-color-2)',
 		'--cz-rc-bg': backgroundColor || '#ffffff',
 	};
 

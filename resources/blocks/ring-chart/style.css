@@ -57,11 +57,11 @@
 	font-weight: 700;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
-	color: var(--theme-palette-color-2, #c6a532);
+	color: var(--cz-rc-eyebrow-color);
 }
 
 .cz-ring-chart__ring.is-core .cz-ring-chart__eyebrow {
-	color: color-mix( in srgb, var(--theme-palette-color-2, #c6a532) 70%, white );
+	color: color-mix( in srgb, var(--cz-rc-eyebrow-color) 70%, white );
 }
 
 .cz-ring-chart__name {

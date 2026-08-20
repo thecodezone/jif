@@ -20,6 +20,18 @@
 	margin-bottom: 8px;
 }
 
+.cz-rc-ring-row.is-dragging {
+	opacity: 0.4;
+}
+
+.cz-rc-ring-row__handle {
+	flex: none;
+	display: flex;
+	align-items: center;
+	color: #757575;
+	cursor: grab;
+}
+
 .cz-rc-ring-row__index {
 	flex: none;
 	width: 20px;

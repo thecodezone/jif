@@ -17,8 +17,9 @@ import {
 	Button,
 	Dropdown,
 	ColorPicker,
+	Icon,
 } from '@wordpress/components';
-import { desktop, tablet, mobile, plus, trash } from '@wordpress/icons';
+import { desktop, tablet, mobile, plus, trash, dragHandle } from '@wordpress/icons';
 import { buildRingChartStyleVars, buildRingStyleVars } from './style-vars';
 
 const MIN_RINGS = 2;
@@ -38,12 +39,15 @@ const FONT_WEIGHTS = [
 	{ label: 'Extrabold (800)', value: '800' },
 ];
 
+// Generic, theme-driven fallbacks for newly added rings — the palette a
+// Blocksy Customizer defines, not a hardcoded brand palette, so the block
+// looks reasonable on any site it's dropped into.
 const DEFAULT_RING_COLORS = [
-	'var(--theme-palette-color-1, #0c1488)',
-	'#3049b0',
-	'#7d93da',
-	'#c5d7ff',
-	'#e4ecff',
+	'var(--theme-palette-color-1)',
+	'var(--theme-palette-color-2)',
+	'var(--theme-palette-color-3)',
+	'var(--theme-palette-color-4)',
+	'var(--theme-palette-color-5)',
 ];
 
 function ResponsiveRange( { label, value, onChange, min, max, step } ) {
@@ -130,13 +134,27 @@ function FontSizeControl( { label, value, onChange, min, max, step } ) {
 }
 
 /**
- * One row in the rings repeater — a color swatch (opens a ColorPicker
- * popover) plus a remove button; the label itself is edited inline on the
- * ring diagram via RichText, not here.
+ * One row in the rings repeater — a drag handle (reorders which ring is
+ * innermost), a color swatch (opens a ColorPicker popover), and a remove
+ * button; the label itself is edited inline on the ring diagram via
+ * RichText, not here.
  */
-function RingRow( { index, ring, onChangeColor, onRemove, canRemove } ) {
+function RingRow( { index, ring, onChangeColor, onRemove, canRemove, isDragging, onDragStart, onDragOver, onDrop, onDragEnd } ) {
 	return (
-		<div className="cz-rc-ring-row">
+		<div
+			className={ [ 'cz-rc-ring-row', isDragging ? 'is-dragging' : '' ].filter( Boolean ).join( ' ' ) }
+			draggable
+			onDragStart={ onDragStart }
+			onDragOver={ onDragOver }
+			onDrop={ onDrop }
+			onDragEnd={ onDragEnd }
+		>
+			<span
+				className="cz-rc-ring-row__handle"
+				aria-label={ sprintf( __( 'Drag to reorder ring %d', 'jif' ), index + 1 ) }
+			>
+				<Icon icon={ dragHandle } size={ 16 } />
+			</span>
 			<span className="cz-rc-ring-row__index">{ index + 1 }</span>
 			<span className="cz-rc-ring-row__label">
 				{ ring.label || __( '(empty label)', 'jif' ) }
@@ -182,8 +200,11 @@ export default function edit( { attributes, setAttributes } ) {
 		fontFamily,
 		coreLabelColor,
 		ringLabelColor,
+		eyebrowColor,
 		backgroundColor,
 	} = attributes;
+
+	const [ draggedIndex, setDraggedIndex ] = useState( null );
 
 	const updateRing = ( index, patch ) => {
 		const next = rings.map( ( ring, i ) => ( i === index ? { ...ring, ...patch } : ring ) );
@@ -194,8 +215,7 @@ export default function edit( { attributes, setAttributes } ) {
 		if ( rings.length >= MAX_RINGS ) {
 			return;
 		}
-		const color = DEFAULT_RING_COLORS[ rings.length ] ?? '#c5d7ff';
-		setAttributes( { rings: [ ...rings, { label: __( 'New ring', 'jif' ), color } ] } );
+		setAttributes( { rings: [ ...rings, { label: '', color: DEFAULT_RING_COLORS[ rings.length ] } ] } );
 	};
 
 	const removeRing = ( index ) => {
@@ -203,6 +223,16 @@ export default function edit( { attributes, setAttributes } ) {
 			return;
 		}
 		setAttributes( { rings: rings.filter( ( _, i ) => i !== index ) } );
+	};
+
+	const moveRing = ( from, to ) => {
+		if ( from === to ) {
+			return;
+		}
+		const next = [ ...rings ];
+		const [ moved ] = next.splice( from, 1 );
+		next.splice( to, 0, moved );
+		setAttributes( { rings: next } );
 	};
 
 	const blockProps = useBlockProps( {
@@ -222,6 +252,20 @@ export default function edit( { attributes, setAttributes } ) {
 							onChangeColor={ ( color ) => updateRing( index, { color } ) }
 							onRemove={ () => removeRing( index ) }
 							canRemove={ rings.length > MIN_RINGS }
+							isDragging={ draggedIndex === index }
+							onDragStart={ ( e ) => {
+								setDraggedIndex( index );
+								e.dataTransfer.effectAllowed = 'move';
+							} }
+							onDragOver={ ( e ) => e.preventDefault() }
+							onDrop={ ( e ) => {
+								e.preventDefault();
+								if ( draggedIndex !== null ) {
+									moveRing( draggedIndex, index );
+								}
+								setDraggedIndex( null );
+							} }
+							onDragEnd={ () => setDraggedIndex( null ) }
 						/>
 					) ) }
 					<Button
@@ -235,7 +279,7 @@ export default function edit( { attributes, setAttributes } ) {
 						{ __( 'Add ring', 'jif' ) }
 					</Button>
 					<p className="components-base-control__help">
-						{ __( 'Edit each label directly on the diagram. 2–5 rings; ring 1 is the innermost.', 'jif' ) }
+						{ __( 'Drag to reorder. Edit each label directly on the diagram. 2–5 rings; ring 1 is the innermost.', 'jif' ) }
 					</p>
 				</PanelBody>
 
@@ -302,6 +346,11 @@ export default function edit( { attributes, setAttributes } ) {
 							value: ringLabelColor,
 							onChange: ( value ) => setAttributes( { ringLabelColor: value } ),
 							label: __( 'Ring label text', 'jif' ),
+						},
+						{
+							value: eyebrowColor,
+							onChange: ( value ) => setAttributes( { eyebrowColor: value } ),
+							label: __( 'Eyebrow text', 'jif' ),
 						},
 						{
 							value: backgroundColor,

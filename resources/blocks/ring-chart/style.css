@@ -1,0 +1,109 @@
+.cz-ring-chart {
+	display: grid;
+	width: max-content;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+/*
+ * Every ring shares the same grid cell and is centered within it, so
+ * successive rings simply grow outward from a shared center — no
+ * top/left percentage math needed regardless of how many rings there are.
+ */
+.cz-ring-chart__ring {
+	grid-area: 1 / 1;
+	place-self: center;
+	position: relative;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 1.5px solid var(--cz-rc-ring-color);
+	width: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-mobile) * var(--i) * 2));
+	height: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-mobile) * var(--i) * 2));
+}
+
+.cz-ring-chart__ring.is-core {
+	border: none;
+	background: var(--cz-rc-ring-color);
+}
+
+.cz-ring-chart__label {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: var(--cz-rc-bg);
+	padding: 0 14px;
+	text-align: center;
+	white-space: nowrap;
+	max-width: 90vw;
+}
+
+.cz-ring-chart__ring.is-core .cz-ring-chart__label {
+	position: static;
+	top: auto;
+	left: auto;
+	transform: none;
+	background: transparent;
+	padding: 0 14px;
+}
+
+.cz-ring-chart__eyebrow {
+	display: block;
+	font-family: var(--cz-rc-font-family, inherit);
+	font-size: var(--cz-rc-eyebrow-size-mobile);
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--theme-palette-color-2, #c6a532);
+}
+
+.cz-ring-chart__ring.is-core .cz-ring-chart__eyebrow {
+	color: color-mix( in srgb, var(--theme-palette-color-2, #c6a532) 70%, white );
+}
+
+.cz-ring-chart__name {
+	display: block;
+	margin-top: 2px;
+	font-family: var(--cz-rc-font-family, inherit);
+	font-weight: var(--cz-rc-label-weight, 700);
+	font-size: var(--cz-rc-label-size-mobile);
+	line-height: 1.2;
+	color: var(--cz-rc-ring-label-color);
+}
+
+.cz-ring-chart__ring.is-core .cz-ring-chart__name {
+	color: var(--cz-rc-core-label-color);
+}
+
+@media (min-width: 600px) {
+	.cz-ring-chart__ring {
+		width: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-tablet) * var(--i) * 2));
+		height: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-tablet) * var(--i) * 2));
+	}
+
+	.cz-ring-chart__eyebrow {
+		font-size: var(--cz-rc-eyebrow-size-tablet);
+	}
+
+	.cz-ring-chart__name {
+		font-size: var(--cz-rc-label-size-tablet);
+	}
+}
+
+@media (min-width: 1000px) {
+	.cz-ring-chart__ring {
+		width: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-desktop) * var(--i) * 2));
+		height: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-desktop) * var(--i) * 2));
+	}
+
+	.cz-ring-chart__eyebrow {
+		font-size: var(--cz-rc-eyebrow-size-desktop);
+	}
+
+	.cz-ring-chart__name {
+		font-size: var(--cz-rc-label-size-desktop);
+	}
+}

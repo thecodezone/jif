@@ -9,6 +9,7 @@ namespace JifTheme\ServiceProviders;
 
 use JifTheme\Blocks\ComparisonBar;
 use JifTheme\Blocks\FeaturedStories;
+use JifTheme\Blocks\RingChart;
 use JifTheme\Helpers\Vite;
 use League\Container\ServiceProvider\AbstractServiceProvider;
 use League\Container\ServiceProvider\BootableServiceProviderInterface;
@@ -24,7 +25,7 @@ class BlockServiceProvider extends AbstractServiceProvider implements BootableSe
 	 * @return bool Returns true if the identifier is provided, otherwise false.
 	 */
 	public function provides( string $id ): bool {
-		return in_array( $id, array( ComparisonBar::class, FeaturedStories::class ), true );
+		return in_array( $id, array( ComparisonBar::class, FeaturedStories::class, RingChart::class ), true );
 	}
 
 	/**
@@ -38,6 +39,10 @@ class BlockServiceProvider extends AbstractServiceProvider implements BootableSe
 		$this->getContainer()->add( FeaturedStories::class )
 			->addArgument( Vite::class )
 			->setShared( true );
+
+		$this->getContainer()->add( RingChart::class )
+			->addArgument( Vite::class )
+			->setShared( true );
 	}
 
 	/**
@@ -46,5 +51,6 @@ class BlockServiceProvider extends AbstractServiceProvider implements BootableSe
 	public function boot(): void {
 		$this->getContainer()->get( ComparisonBar::class );
 		$this->getContainer()->get( FeaturedStories::class );
+		$this->getContainer()->get( RingChart::class );
 	}
 }

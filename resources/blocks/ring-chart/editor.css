@@ -1,0 +1,49 @@
+.cz-ring-chart {
+	position: relative;
+}
+
+.cz-rc-responsive-control {
+	margin-bottom: 16px;
+}
+
+.cz-rc-responsive-control__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 4px;
+}
+
+.cz-rc-ring-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.cz-rc-ring-row__index {
+	flex: none;
+	width: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #757575;
+	text-align: center;
+}
+
+.cz-rc-ring-row__label {
+	flex: 1;
+	min-width: 0;
+}
+
+.cz-rc-ring-row__swatch {
+	flex: none;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	padding: 0;
+	cursor: pointer;
+}
+
+.cz-rc-add-ring {
+	margin-top: 4px;
+}

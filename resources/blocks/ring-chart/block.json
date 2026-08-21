@@ -1,0 +1,78 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cz/ring-chart",
+	"title": "Ring Chart",
+	"category": "text",
+	"description": "A concentric-ring diagram: ring 1 is the innermost circle and each later ring contains it. 2–5 rings, each with its own label and color.",
+	"keywords": [ "ring", "concentric", "chart", "diagram", "ripple" ],
+	"textdomain": "jif",
+	"attributes": {
+		"rings": {
+			"type": "array",
+			"default": [
+				{ "label": "", "color": "var(--theme-palette-color-1)" },
+				{ "label": "", "color": "var(--theme-palette-color-2)" }
+			]
+		},
+		"coreSize": {
+			"type": "number",
+			"default": 130
+		},
+		"ringGap": {
+			"type": "object",
+			"default": {
+				"desktop": 54,
+				"tablet": 42,
+				"mobile": 30
+			}
+		},
+		"labelFontSize": {
+			"type": "object",
+			"default": {
+				"desktop": "var(--wp--preset--font-size--medium)",
+				"tablet": "var(--wp--preset--font-size--medium)",
+				"mobile": "var(--wp--preset--font-size--medium)"
+			}
+		},
+		"labelFontWeight": {
+			"type": "string",
+			"default": "700"
+		},
+		"fontFamily": {
+			"type": "string",
+			"default": "var(--theme-heading-font-family)"
+		},
+		"coreLabelColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"ringLabelColor": {
+			"type": "string",
+			"default": "var(--theme-palette-color-1)"
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"labelBorderRadius": {
+			"type": "number",
+			"default": 0
+		},
+		"labelBorderWidth": {
+			"type": "number",
+			"default": 0
+		},
+		"labelBorderStyle": {
+			"type": "string",
+			"default": "solid"
+		},
+		"labelBorderColor": {
+			"type": "string",
+			"default": "transparent"
+		}
+	},
+	"supports": {
+		"html": false
+	}
+}

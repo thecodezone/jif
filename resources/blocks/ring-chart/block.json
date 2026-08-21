@@ -35,14 +35,6 @@
 				"mobile": "var(--wp--preset--font-size--medium)"
 			}
 		},
-		"eyebrowFontSize": {
-			"type": "object",
-			"default": {
-				"desktop": "var(--wp--preset--font-size--small)",
-				"tablet": "var(--wp--preset--font-size--small)",
-				"mobile": "var(--wp--preset--font-size--small)"
-			}
-		},
 		"labelFontWeight": {
 			"type": "string",
 			"default": "700"
@@ -59,13 +51,25 @@
 			"type": "string",
 			"default": "var(--theme-palette-color-1)"
 		},
-		"eyebrowColor": {
-			"type": "string",
-			"default": "var(--theme-palette-color-2)"
-		},
 		"backgroundColor": {
 			"type": "string",
 			"default": "#ffffff"
+		},
+		"labelBorderRadius": {
+			"type": "number",
+			"default": 0
+		},
+		"labelBorderWidth": {
+			"type": "number",
+			"default": 0
+		},
+		"labelBorderStyle": {
+			"type": "string",
+			"default": "solid"
+		},
+		"labelBorderColor": {
+			"type": "string",
+			"default": "transparent"
 		}
 	},
 	"supports": {

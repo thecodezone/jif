@@ -16,6 +16,7 @@ export default defineConfig( async () => ( {
 				'featured-stories-frontend': 'resources/blocks/featured-stories/frontend.css',
 				'ring-chart': 'resources/blocks/ring-chart/index.jsx',
 				'ring-chart-frontend': 'resources/blocks/ring-chart/frontend.css',
+				'ring-chart-frontend-js': 'resources/blocks/ring-chart/frontend.js',
 			},
 			outDir: 'assets/build',
 		} ),

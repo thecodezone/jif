@@ -33,9 +33,11 @@
 	position: absolute;
 	top: 0;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, calc(-50% + var(--cz-rc-label-dip, 0px)));
 	background: var(--cz-rc-bg);
-	padding: 0 14px;
+	border-radius: var(--cz-rc-label-radius, 0);
+	border: var(--cz-rc-label-border-width, 0) var(--cz-rc-label-border-style, solid) var(--cz-rc-label-border-color, transparent);
+	padding: 20px 14px;
 	text-align: center;
 	white-space: nowrap;
 	max-width: 90vw;
@@ -47,26 +49,12 @@
 	left: auto;
 	transform: none;
 	background: transparent;
+	border: none;
 	padding: 0 14px;
-}
-
-.cz-ring-chart__eyebrow {
-	display: block;
-	font-family: var(--cz-rc-font-family, inherit);
-	font-size: var(--cz-rc-eyebrow-size-mobile);
-	font-weight: 700;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: var(--cz-rc-eyebrow-color);
-}
-
-.cz-ring-chart__ring.is-core .cz-ring-chart__eyebrow {
-	color: color-mix( in srgb, var(--cz-rc-eyebrow-color) 70%, white );
 }
 
 .cz-ring-chart__name {
 	display: block;
-	margin-top: 2px;
 	font-family: var(--cz-rc-font-family, inherit);
 	font-weight: var(--cz-rc-label-weight, 700);
 	font-size: var(--cz-rc-label-size-mobile);
@@ -84,10 +72,6 @@
 		height: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-tablet) * var(--i) * 2));
 	}
 
-	.cz-ring-chart__eyebrow {
-		font-size: var(--cz-rc-eyebrow-size-tablet);
-	}
-
 	.cz-ring-chart__name {
 		font-size: var(--cz-rc-label-size-tablet);
 	}
@@ -97,10 +81,6 @@
 	.cz-ring-chart__ring {
 		width: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-desktop) * var(--i) * 2));
 		height: calc(var(--cz-rc-core-size) + (var(--cz-rc-gap-desktop) * var(--i) * 2));
-	}
-
-	.cz-ring-chart__eyebrow {
-		font-size: var(--cz-rc-eyebrow-size-desktop);
 	}
 
 	.cz-ring-chart__name {

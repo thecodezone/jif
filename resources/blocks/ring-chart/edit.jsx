@@ -1,4 +1,4 @@
-import { useState } from '@wordpress/element';
+import { useState, useLayoutEffect, useRef } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import {
 	RichText,
@@ -16,11 +16,11 @@ import {
 	ButtonGroup,
 	Button,
 	Dropdown,
-	ColorPicker,
+	ColorPalette,
 	Icon,
 } from '@wordpress/components';
 import { desktop, tablet, mobile, plus, trash, dragHandle } from '@wordpress/icons';
-import { buildRingChartStyleVars, buildRingStyleVars } from './style-vars';
+import { buildRingChartStyleVars, buildRingStyleVars, computeLabelDip } from './style-vars';
 
 const MIN_RINGS = 2;
 const MAX_RINGS = 5;
@@ -37,6 +37,12 @@ const FONT_WEIGHTS = [
 	{ label: 'Semibold (600)', value: '600' },
 	{ label: 'Bold (700)', value: '700' },
 	{ label: 'Extrabold (800)', value: '800' },
+];
+
+const BORDER_STYLES = [
+	{ label: 'Solid', value: 'solid' },
+	{ label: 'Dashed', value: 'dashed' },
+	{ label: 'Dotted', value: 'dotted' },
 ];
 
 // Generic, theme-driven fallbacks for newly added rings — the palette a
@@ -134,12 +140,55 @@ function FontSizeControl( { label, value, onChange, min, max, step } ) {
 }
 
 /**
- * One row in the rings repeater — a drag handle (reorders which ring is
- * innermost), a color swatch (opens a ColorPicker popover), and a remove
- * button; the label itself is edited inline on the ring diagram via
- * RichText, not here.
+ * Tracks how far a non-core ring's label needs to shift down so it sits on
+ * the ring's arc as it actually runs under the label's width, not just on
+ * the arc's top peak (see computeLabelDip). Re-measures whenever the ring
+ * or the label's own rendered size changes — different breakpoints resize
+ * both the ring's radius and the label's font size / text wrapping.
+ *
+ * @param {Object}  ringRef  Ref to the ring wrapper element.
+ * @param {Object}  labelRef Ref to the label element to nudge (its own
+ *                           padding is left out of the measurement — it's
+ *                           the margin that absorbs the arc's residual
+ *                           curve, not span that itself needs covering).
+ * @param {Object}  textRef  Ref to the text node inside the label, whose
+ *                           rendered width drives the dip calculation.
+ * @param {boolean} enabled  Whether to measure at all — false for the core
+ *                           ring, whose label isn't positioned on any arc.
  */
-function RingRow( { index, ring, onChangeColor, onRemove, canRemove, isDragging, onDragStart, onDragOver, onDrop, onDragEnd } ) {
+function useLabelDip( ringRef, labelRef, textRef, enabled ) {
+	useLayoutEffect( () => {
+		const ringEl = ringRef.current;
+		const labelEl = labelRef.current;
+		const textEl = textRef.current;
+		if ( ! enabled || ! ringEl || ! labelEl || ! textEl ) {
+			return;
+		}
+
+		const measure = () => {
+			const radius = ringEl.getBoundingClientRect().width / 2;
+			const halfWidth = textEl.getBoundingClientRect().width / 2;
+			const dip = computeLabelDip( radius, halfWidth );
+			labelEl.style.setProperty( '--cz-rc-label-dip', `${ dip }px` );
+		};
+
+		measure();
+
+		const observer = new ResizeObserver( measure );
+		observer.observe( ringEl );
+		observer.observe( textEl );
+
+		return () => observer.disconnect();
+	}, [ ringRef, labelRef, textRef, enabled ] );
+}
+
+/**
+ * One row in the rings repeater — a drag handle (reorders which ring is
+ * innermost), a color swatch (opens a ColorPalette popover, same preset
+ * swatches as the Color panel), and a remove button; the label itself is
+ * edited inline on the ring diagram via RichText, not here.
+ */
+function RingRow( { index, ring, colors, onChangeColor, onRemove, canRemove, isDragging, onDragStart, onDragOver, onDrop, onDragEnd } ) {
 	return (
 		<div
 			className={ [ 'cz-rc-ring-row', isDragging ? 'is-dragging' : '' ].filter( Boolean ).join( ' ' ) }
@@ -171,10 +220,12 @@ function RingRow( { index, ring, onChangeColor, onRemove, canRemove, isDragging,
 					/>
 				) }
 				renderContent={ () => (
-					<ColorPicker
-						color={ ring.color }
+					<ColorPalette
+						colors={ colors }
+						value={ ring.color }
 						onChange={ onChangeColor }
 						enableAlpha={ false }
+						clearable={ false }
 					/>
 				) }
 			/>
@@ -195,14 +246,18 @@ export default function edit( { attributes, setAttributes } ) {
 		coreSize,
 		ringGap,
 		labelFontSize,
-		eyebrowFontSize,
 		labelFontWeight,
 		fontFamily,
 		coreLabelColor,
 		ringLabelColor,
-		eyebrowColor,
 		backgroundColor,
+		labelBorderRadius,
+		labelBorderWidth,
+		labelBorderStyle,
+		labelBorderColor,
 	} = attributes;
+
+	const [ colors ] = useSettings( 'color.palette' );
 
 	const [ draggedIndex, setDraggedIndex ] = useState( null );
 
@@ -249,6 +304,7 @@ export default function edit( { attributes, setAttributes } ) {
 							key={ index }
 							index={ index }
 							ring={ ring }
+							colors={ colors }
 							onChangeColor={ ( color ) => updateRing( index, { color } ) }
 							onRemove={ () => removeRing( index ) }
 							canRemove={ rings.length > MIN_RINGS }
@@ -324,13 +380,6 @@ export default function edit( { attributes, setAttributes } ) {
 						onChange={ ( value ) => setAttributes( { labelFontWeight: value } ) }
 						__nextHasNoMarginBottom
 					/>
-					<FontSizeControl
-						label={ __( 'Eyebrow font size', 'jif' ) }
-						value={ eyebrowFontSize }
-						onChange={ ( value ) => setAttributes( { eyebrowFontSize: value } ) }
-						min={ 8 }
-						max={ 24 }
-					/>
 				</PanelBody>
 
 				<PanelColorSettings
@@ -348,46 +397,90 @@ export default function edit( { attributes, setAttributes } ) {
 							label: __( 'Ring label text', 'jif' ),
 						},
 						{
-							value: eyebrowColor,
-							onChange: ( value ) => setAttributes( { eyebrowColor: value } ),
-							label: __( 'Eyebrow text', 'jif' ),
-						},
-						{
 							value: backgroundColor,
 							onChange: ( value ) => setAttributes( { backgroundColor: value } ),
-							label: __( 'Page background', 'jif' ),
-							help: __( 'The surface the diagram sits on, so outer-ring labels break the ring line cleanly.', 'jif' ),
+							label: __( 'Label background', 'jif' ),
+							help: __( 'The patch behind each ring label, so it covers the ring line cleanly.', 'jif' ),
+						},
+						{
+							value: labelBorderColor,
+							onChange: ( value ) => setAttributes( { labelBorderColor: value } ),
+							label: __( 'Label border', 'jif' ),
 						},
 					] }
 				/>
+
+				<PanelBody title={ __( 'Label shape', 'jif' ) } initialOpen={ false }>
+					<RangeControl
+						label={ __( 'Label border radius', 'jif' ) }
+						help={ __( 'Round the label background’s corners; set high enough and it becomes a pill.', 'jif' ) }
+						value={ labelBorderRadius }
+						onChange={ ( value ) => setAttributes( { labelBorderRadius: value } ) }
+						min={ 0 }
+						max={ 40 }
+						__nextHasNoMarginBottom
+					/>
+					<RangeControl
+						label={ __( 'Label border width', 'jif' ) }
+						value={ labelBorderWidth }
+						onChange={ ( value ) => setAttributes( { labelBorderWidth: value } ) }
+						min={ 0 }
+						max={ 10 }
+						__nextHasNoMarginBottom
+					/>
+					<SelectControl
+						label={ __( 'Label border style', 'jif' ) }
+						value={ labelBorderStyle }
+						options={ BORDER_STYLES }
+						onChange={ ( value ) => setAttributes( { labelBorderStyle: value } ) }
+						__nextHasNoMarginBottom
+					/>
+				</PanelBody>
 			</InspectorControls>
 
 			<div { ...blockProps }>
-				{ rings.map( ( ring, index ) => {
-					const isCore = index === 0;
-					return (
-						<div
-							key={ index }
-							className={ [ 'cz-ring-chart__ring', isCore ? 'is-core' : '' ].filter( Boolean ).join( ' ' ) }
-							style={ buildRingStyleVars( ring, index ) }
-						>
-							<div className="cz-ring-chart__label">
-								<span className="cz-ring-chart__eyebrow">
-									{ sprintf( __( 'Ring %d', 'jif' ), index + 1 ) }
-								</span>
-								<RichText
-									tagName="span"
-									className="cz-ring-chart__name"
-									value={ ring.label }
-									onChange={ ( value ) => updateRing( index, { label: value } ) }
-									placeholder={ __( 'Ring label…', 'jif' ) }
-									allowedFormats={ [] }
-								/>
-							</div>
-						</div>
-					);
-				} ) }
+				{ rings.map( ( ring, index ) => (
+					<RingDisplay
+						key={ index }
+						ring={ ring }
+						index={ index }
+						onChangeLabel={ ( value ) => updateRing( index, { label: value } ) }
+					/>
+				) ) }
 			</div>
 		</>
+	);
+}
+
+/**
+ * One ring's diagram markup — its own component so useLabelDip's refs and
+ * ResizeObserver are scoped per ring rather than shared across the map().
+ */
+function RingDisplay( { ring, index, onChangeLabel } ) {
+	const isCore = index === 0;
+	const ringRef = useRef();
+	const labelRef = useRef();
+	const textRef = useRef();
+
+	useLabelDip( ringRef, labelRef, textRef, ! isCore );
+
+	return (
+		<div
+			ref={ ringRef }
+			className={ [ 'cz-ring-chart__ring', isCore ? 'is-core' : '' ].filter( Boolean ).join( ' ' ) }
+			style={ buildRingStyleVars( ring, index ) }
+		>
+			<div ref={ labelRef } className="cz-ring-chart__label">
+				<RichText
+					ref={ textRef }
+					tagName="span"
+					className="cz-ring-chart__name"
+					value={ ring.label }
+					onChange={ onChangeLabel }
+					placeholder={ __( 'Ring label…', 'jif' ) }
+					allowedFormats={ [] }
+				/>
+			</div>
+		</div>
 	);
 }

@@ -49,13 +49,15 @@ export function buildRingChartStyleVars( attributes ) {
 		coreSize,
 		ringGap,
 		labelFontSize,
-		eyebrowFontSize,
 		labelFontWeight,
 		fontFamily,
 		coreLabelColor,
 		ringLabelColor,
-		eyebrowColor,
 		backgroundColor,
+		labelBorderRadius,
+		labelBorderWidth,
+		labelBorderStyle,
+		labelBorderColor,
 	} = attributes;
 
 	const vars = {
@@ -64,13 +66,15 @@ export function buildRingChartStyleVars( attributes ) {
 		'--cz-rc-label-weight': labelFontWeight ?? '700',
 		'--cz-rc-core-label-color': coreLabelColor || '#ffffff',
 		'--cz-rc-ring-label-color': ringLabelColor || 'var(--theme-palette-color-1)',
-		'--cz-rc-eyebrow-color': eyebrowColor || 'var(--theme-palette-color-2)',
 		'--cz-rc-bg': backgroundColor || '#ffffff',
+		'--cz-rc-label-radius': withUnit( labelBorderRadius ?? 0 ),
+		'--cz-rc-label-border-width': withUnit( labelBorderWidth ?? 0 ),
+		'--cz-rc-label-border-style': labelBorderStyle || 'solid',
+		'--cz-rc-label-border-color': labelBorderColor || 'transparent',
 	};
 
 	addResponsiveVars( vars, '--cz-rc-gap', ringGap );
 	addResponsiveVars( vars, '--cz-rc-label-size', labelFontSize );
-	addResponsiveVars( vars, '--cz-rc-eyebrow-size', eyebrowFontSize );
 
 	return vars;
 }
@@ -87,4 +91,40 @@ export function buildRingStyleVars( ring, index ) {
 		'--cz-rc-ring-color': ring.color,
 		'--i': index,
 	};
+}
+
+/**
+ * A ring's radius in pixels, given the core diameter and the (already
+ * device-resolved) gap between successive rings.
+ *
+ * @param {number} coreSize Core diameter, in pixels.
+ * @param {number} gap      Gap added per ring step, in pixels, for the current breakpoint.
+ * @param {number} index    0-based ring index (0 = innermost/core).
+ * @return {number} Ring radius, in pixels.
+ */
+export function ringRadius( coreSize, gap, index ) {
+	return coreSize / 2 + gap * index;
+}
+
+/**
+ * How far a ring's label needs to shift down from the ring's top peak so it
+ * sits on the arc as it actually runs under the label, rather than on the
+ * peak alone.
+ *
+ * The label is centered on the ring's top-dead-center point, but the ring's
+ * circular edge curves away from that point across the label's width — a
+ * wide label on a small ring "sees" a lower arc at its edges than at its
+ * center. This returns that drop (a circular sagitta) so the label can be
+ * nudged down to sit on the arc's local average height instead of the peak.
+ *
+ * @param {number} radius        Ring radius, in pixels.
+ * @param {number} labelHalfWidth Half of the label's rendered width, in pixels.
+ * @return {number} Vertical offset, in pixels (0 if the label is narrower than the ring itself allows).
+ */
+export function computeLabelDip( radius, labelHalfWidth ) {
+	if ( ! radius || ! labelHalfWidth || labelHalfWidth <= 0 ) {
+		return 0;
+	}
+	const clampedHalfWidth = Math.min( labelHalfWidth, radius );
+	return radius - Math.sqrt( radius ** 2 - clampedHalfWidth ** 2 );
 }

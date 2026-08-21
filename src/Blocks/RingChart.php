@@ -70,11 +70,14 @@ class RingChart {
 	}
 
 	/**
-	 * Enqueue the block's frontend styles when the block is present on the page.
+	 * Enqueue the block's frontend styles and script when the block is
+	 * present on the page.
 	 *
-	 * Uses a dedicated CSS-only Vite entry rather than the editor script's
-	 * registered style handles, since the frontend never loads the editor's
-	 * JS bundle at all.
+	 * Uses dedicated Vite entries rather than the editor script's registered
+	 * handles, since the frontend never loads the editor's JS bundle at all.
+	 * The script nudges each ring's label down to sit on the ring's arc as
+	 * it actually runs under the label's width (see frontend.js) — CSS alone
+	 * can't do this because it depends on the label's rendered pixel width.
 	 */
 	public function enqueue_frontend_style(): void {
 		if ( ! Blocks::page_has_block( 'cz/ring-chart' ) ) {
@@ -84,6 +87,11 @@ class RingChart {
 		$this->vite->enqueue_css(
 			'resources/blocks/ring-chart/frontend.css',
 			'cz-ring-chart-frontend'
+		);
+
+		$this->vite->enqueue(
+			'resources/blocks/ring-chart/frontend.js',
+			array( 'handle' => 'cz-ring-chart-frontend-js' )
 		);
 	}
 }

@@ -1,5 +1,4 @@
 import { RichText, useBlockProps } from '@wordpress/block-editor';
-import { sprintf } from '@wordpress/i18n';
 import { buildRingChartStyleVars, buildRingStyleVars } from './style-vars';
 
 export default function save( { attributes } ) {
@@ -19,9 +18,6 @@ export default function save( { attributes } ) {
 						style={ buildRingStyleVars( ring, index ) }
 					>
 						<div className="cz-ring-chart__label">
-							<span className="cz-ring-chart__eyebrow">
-								{ sprintf( 'Ring %d', index + 1 ) }
-							</span>
 							<RichText.Content
 								tagName="span"
 								className="cz-ring-chart__name"
